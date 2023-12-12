@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-borderless table-primary align-middle">
+            <thead class="table-light">
+                <caption>Companies</caption>
+                <tr>
+                    <th>Company name</th>
+                    <th>Career Link</th>
+                    <th>City</th>
+                </tr>
+            </thead>
+            
+            <tbody class="table-group-divider">
+                {% for file in files %}
+                    <tr class="table-primary">
+                        <td>{{ file.name }}</td>
+                        <td><a href="{{ file.careerPageUrl }}" target="_blank">{{ file.name }}</a></td>
+                        <td>{{ file.city }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+
+{% endblock %}

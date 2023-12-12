@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<form method="POST" action="">
+    {{ form.hidden_tag() }}
+    {% for field in form %}
+        {% if field.name == 'submit' %}
+            <button type="submit" class="btn btn-primary mt-2">{{ form.submit.label }}</button>
+        {% else %}
+
+            <div class="form-group">
+                {{ field(class="form-control mt-2") }}
+                {% if field.errors %}
+                    <ul class="errors">
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+    
+</form>
+
+{% endblock %}

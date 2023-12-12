@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+<form action="" method="post" enctype="multipart/form-data">
+    {{ form.csrf_token() }}
+    <fieldset class="form-group">
+        {% for field in form %}
+            {% if field.name == "submit" %}
+                <div class="form-group">
+                    {{ field(class="btn btn-outline-info btn-lg mt-2") }}
+                </div>
+            {% else %}
+                <div class="form-group">
+                    {% if field.errors %}
+                        {{ field(class="form-control form-control-lg is-invalid mt-2") }}
+                        <div class="invalid-feedback">
+                            {% for error in field.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ field(class="form-control form-control-lg mt-2") }}
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </fieldset>
+</form>
+{% endblock %}

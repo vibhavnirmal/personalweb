@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-borderless table-primary align-middle">
+            <thead class="table-light">
+                <caption>Food I have tried</caption>
+                <tr>
+                    <th>Date</th>
+                    <th>Item Name</th>
+                    <th>Company</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            
+            <tbody class="table-group-divider">
+                {% for file in files %}
+                    <tr class="table-primary">
+                        <td>{{ file.dateAdded.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                        <td>{{ file.name }}</td>
+                        <td>{{ file.brand }}</td>
+                        <td>{{ file.price }}</td>
+                        <td><img src="https://{{ bucket }}.s3.{{ region }}.amazonaws.com/{{ file.image_data }}" class="img-fluid img-thumbnail mx-auto d-block vin-img"></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<!-- "name": "ABC Tech Solutions",
+"url": "https://www.abctechsolutions.com",
+"careerPageUrl": "https://www.abctechsolutions.com/careers",
+"description": "ABC Tech Solutions is a leading technology company specializing in software development and IT consulting.",
+"types": ["Technology", "Consulting"],
+"location": "San Francisco",
+"state": "California",
+"country": "United States" -->
+
+<form action="" method="post">
+    {{ form.csrf_token() }}
+    <fieldset class="form-group">
+
+        <legend class="mt-4 mb-4 text-center">Add Company Information</legend>
+        
+        <!-- for each StringField -->
+        {% for field in form %}
+            {% if field.type == "StringField" %}
+                <div class="form-group">
+                    <!-- {{ field.label(class="form-control-label mt-1") }} -->
+                    {% if field.errors %}
+                        {{ field(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in field.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ field(class="form-control form-control-lg mt-2") }}
+                    {% endif %}
+                </div>
+            {% elif field.type== "TextAreaField" %}
+                <div class="form-group">
+                    <!-- {{ field.label(class="form-control-label mt-1") }} -->
+                    {% if field.errors %}
+                        {{ field(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in field.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ field(class="form-control form-control-lg mt-2") }}
+                    {% endif %}
+                </div>
+            {% elif field.type == "SubmitField" %}
+                <div class="form-group" style="text-align: right;">
+                    {{ form.submit(class="btn btn-outline-info mt-3") }}
+                </div>
+            {% endif %}
+                
+
+        {% endfor %}
+
+
+    </fieldset>
+
+</form>
+
+{% endblock %}
