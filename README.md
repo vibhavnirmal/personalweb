@@ -1,1 +1,43 @@
-# personalweb
+# Personal Life Tracker - A Web App for Self-Awareness
+
+This personal life tracker web app allows you to gain insights into your daily life by tracking your expenditures, food consumption, leisure activities, and more. Built with Flask (can change) and Bootstrap for a user-friendly experience, the app is self-hosted and leverages MongoDB and AWS for data storage.
+
+## Features:
+
+###  Track your spending:
+- [ ] Record expenses, including category, amount, date, and location.
+- [ ] Insights into spending habits and identify areas for improvement using pie and bar charts which provide a visual representation of your expenditures.
+- [ ] Monthly and yearly summaries allow comparison of spending over time.
+- [ ] Export data to a different file formats for further analysis.
+
+### Log your food intake:
+- [ ] Record meals and snacks, including name, price, date, location, and an image.
+- [ ] Track calorie intake and analyze dietary patterns (get information of that specific item from the internet).
+- [ ] Rate experience with each food item / Location that you tried that for future reference (stars or score out of 10).
+
+### Application tracker:
+- [ ] Track companies one has applied to, position applied for, application date, and status.
+- [ ] Contact information for each company, including website, email(optional), and contact LinkedIn.
+
+### Company tracker:
+- [ ] Track companies you're interested in, their contact information, and your past interactions (if iterviewed what did they ask and other stuff).
+- [ ] (Optional) Allow promotional content from companies that you're interested in to be displayed on the app (if we plan to make it public and get some money from it).
+
+
+### Technology Stack:
+
+- Frontend: Not decided yet
+- Backend: Not decided yet
+- Database: Not decided yet
+
+### Hosting:
+
+    Self-hosted for greater control and privacy.
+
+### Interested in contributing?:
+
+    Please read the CONTRIBUTING.md file for more information.
+
+
+
+Let's take control of your life and make informed decisions with the Personal Life Tracker!
