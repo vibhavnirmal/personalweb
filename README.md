@@ -2,6 +2,23 @@
 
 This personal life tracker web app allows you to gain insights into your daily life by tracking your expenditures, food consumption, leisure activities, and more. Built with Flask (can change) and Bootstrap for a user-friendly experience, the app is self-hosted and leverages MongoDB and AWS for data storage.
 
+## Installation
+
+### Prerequisites
+
+- Python 3.6 or higher
+- MongoDB Account
+- AWS account (optional for image storage)
+
+### Setup
+
+1. Clone the repository
+2. Install the required packages using `pip install -r requirements.txt`
+3. Rename `credentials_template.json` file as `credentials.json` in the root directory and add the appropriate credentials
+4. Run the app using `python app.py`
+5. Navigate to `localhost:5000` in your browser
+6. Enjoy!
+
 ## Features:
 
 ###  Track your spending:

@@ -4,7 +4,7 @@ from pymongo import MongoClient
 import boto3
 
 # read aws credentials from file
-with open('aws_creds.json') as json_file:
+with open('credentials.json') as json_file:
     data = json.load(json_file)
     my_aws_access_key_id = data['aws_access_key_id']
     my_aws_secret_access_key = data['aws_secret_access_key']
