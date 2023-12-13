@@ -10,23 +10,31 @@ import uuid
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
+    """
+    Check if the file is allowed to be uploaded
+    """
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/')
 def index():
+    """
+    Home page
+    """
     return render_template('dashboard.html', title='Home')
-
 
 # related to job applications
 @app.route('/add_company', methods=['GET', 'POST'])
 def add_company():
+    """
+    Add a new company to the database
+    """
     if request.method == 'POST':
         form = CompanyForm(request.form)
         if form.validate_on_submit():
             name=form.name.data
             url=form.url.data
-            careerPageUrl=form.careerPageUrl.data
+            career_page_url=form.career_page_url.data
             description=form.description.data
             types=form.types.data
             city=form.city.data
@@ -37,7 +45,7 @@ def add_company():
                 {
                     'name': name, 
                     'url': url, 
-                    'careerPageUrl': careerPageUrl, 
+                    'career_page_url': career_page_url, 
                     'description': description, 
                     'types': types, 
                     'city': city, 
@@ -57,17 +65,23 @@ def add_company():
 
 @app.route('/view_companies', methods=['GET', 'POST'])
 def view_companies():
+    """
+    View all companies in the database
+    """
     all_data = db_mongo_job.company_list.find()
     return render_template('view_companies.html', title='View Companies', files=all_data)
 
 @app.route('/add_application', methods=['GET', 'POST'])
 def add_application():
+    """
+    Add a new application to the database
+    """
     if request.method == 'POST':
         form = ApplicationForm(request.form)
         if form.validate_on_submit():
             name=form.name.data
             url=form.url.data
-            careerPageUrl=form.careerPageUrl.data
+            career_page_url=form.career_page_url.data
             description=form.description.data
             types=form.types.data
             city=form.city.data
@@ -78,7 +92,7 @@ def add_application():
                 {
                     'name': name, 
                     'url': url, 
-                    'careerPageUrl': careerPageUrl, 
+                    'career_page_url': career_page_url, 
                     'description': description, 
                     'types': types, 
                     'city': city, 
@@ -98,12 +112,18 @@ def add_application():
 
 @app.route('/view_applications')
 def view_applications():
+    """
+    View all applications in the database
+    """
     return render_template('view_applications.html', title='View Applications')
 
 
 # related to food I tried
 @app.route('/add_new_food', methods=['GET', 'POST'])
 def add_new_food():
+    """
+    Add a new food to the database
+    """
     if request.method == 'POST':
         form = FoodForm(request.form)
         name=form.name.data
@@ -150,9 +170,15 @@ def add_new_food():
 
 @app.route('/view_food')
 def view_food():
+    """
+    View all food in the database
+    """
     all_data = db_mongo_food.food_list.find()
     return render_template('view_food.html', title='View Food', files=all_data, bucket=my_bucket_name, region=my_bucket_region)
 
 @app.errorhandler(413)
 def too_large(e):
+    """
+    Error handler for file too large
+    """
     return make_response(jsonify(message="File is too large"), 413)

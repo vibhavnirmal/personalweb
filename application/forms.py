@@ -16,7 +16,7 @@ class CompanyForm(FlaskForm):
         validators=[DataRequired()],
         render_kw={"placeholder": "Company URL"},
     )
-    careerPageUrl = StringField(
+    career_page_url = StringField(
         "Career Page URL",
         validators=[DataRequired()],
         render_kw={"placeholder": "Career Page URL"},
