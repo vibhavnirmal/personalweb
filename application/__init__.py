@@ -1,9 +1,9 @@
+import json
 from flask import Flask
 from pymongo import MongoClient
 import boto3
 
 # read aws credentials from file
-import json
 with open('aws_creds.json') as json_file:
     data = json.load(json_file)
     my_aws_access_key_id = data['aws_access_key_id']

@@ -1,8 +1,7 @@
-from application import app
+from application import app, db_mongo_job, db_mongo_food, bucket, my_bucket_name, my_bucket_region
 from flask import render_template, request, redirect, flash, make_response, jsonify, send_from_directory
 from .forms import CompanyForm, FoodForm, ApplicationForm
 from datetime import datetime
-from application import db_mongo_job, db_mongo_food, my_bucket_name, my_bucket_region, bucket
 from werkzeug.utils import secure_filename
 import uuid
 
