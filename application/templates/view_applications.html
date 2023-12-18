@@ -1,6 +1,39 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h1>I have applied here before</h1>
+<div class="container-fluid mt-4">
+    <h1>I have applied here before</h1>
+    <hr>
+    TEMPOARY TABLE
+    <hr>
+    <div class="table-responsive">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Tiger Nixon</td>
+                    <td>System Architect</td>
+                    
+
+                    <td><a href="#"><i class="bi-pencil-square"></i></a></td>
+                    <td><a href="#"><i class="bi-trash"></i></a></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
 
 {% endblock %}
