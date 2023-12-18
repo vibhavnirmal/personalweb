@@ -2,6 +2,8 @@
 
 This personal life tracker web app allows you to gain insights into your daily life by tracking your expenditures, food consumption, leisure activities, and more. Built with Flask (can change) and Bootstrap for a user-friendly experience, the app is self-hosted and leverages MongoDB and AWS for data storage.
 
+![](demo.gif)
+
 ## Installation
 
 ### Prerequisites

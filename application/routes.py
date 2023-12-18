@@ -162,7 +162,7 @@ def add_new_food():
         # flash message is displayed on the next page (index)
         flash(f'Food {form.name.data} added!', 'success')
 
-        return redirect('/')
+        return redirect('/view_food')
     else:
         form = FoodForm()
 

@@ -1,40 +1,41 @@
+"""
+This file is the main file of the application. It contains the configuration of the application.
+"""
+
 import json
 from flask import Flask
 from pymongo import MongoClient
 import boto3
 
-# read aws credentials from file
-with open('credentials.json') as json_file:
-    data = json.load(json_file)
-    my_aws_access_key_id = data['aws_access_key_id']
-    my_aws_secret_access_key = data['aws_secret_access_key']
 
-    my_app_secret_key = data['app_secret_key']
+def read_credentials(filename):
+    """
+    Read credentials from a file
+    """
+    with open(filename) as json_file:
+        creds = json.load(json_file)
+    return creds
 
-    my_mongo_uri = data['mongo_uri']
 
-    my_bucket_name = data['bucket_name']
-    my_bucket_region = data['bucket_region']
+creds = read_credentials('credentials.json')
 
-    my_food_data_collection = data['food_data_collection']
-    my_job_application_collection = data['job_application_collection']
-    
-    my_amazon_service = data['amazon_service']
+my_bucket_name = creds['bucket_name']
+my_bucket_region = creds['bucket_region']
 
 app = Flask(__name__)
-app.secret_key= my_app_secret_key
+# app.secret_key= my_app_secret_key
+app.secret_key = creds
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 try:
-    client = MongoClient(my_mongo_uri)
+    client = MongoClient(creds['mongo_uri'])
 
-    db_mongo_job = client.get_database(my_job_application_collection)
-    db_mongo_food = client.get_database(my_food_data_collection)
+    db_mongo_job = client.get_database(creds['job_application_collection'])
+    db_mongo_food = client.get_database(creds['food_data_collection'])
 
-    s3 = boto3.resource(my_amazon_service, 
-                        aws_access_key_id= my_aws_access_key_id,
-                        aws_secret_access_key= my_aws_secret_access_key
-                        )
+    s3 = boto3.resource(creds['amazon_service'],
+                        aws_access_key_id= creds['aws_access_key_id'],
+                        aws_secret_access_key= creds['aws_secret_access_key'])
 
     bucket = s3.Bucket(my_bucket_name)
 except Exception as e:
