@@ -58,7 +58,7 @@ def add_company():
             # flash message is displayed on the next page (index)
             flash(f'Company {form.name.data} added!', 'success')
 
-            return redirect('/')
+            return redirect('/add_company')
     else:
         form = CompanyForm()
     return render_template('add_company.html', title='Add Company', form=form)
@@ -105,7 +105,7 @@ def add_application():
             # flash message is displayed on the next page (index)
             flash(f'Company {form.name.data} added!', 'success')
 
-            return redirect('/')
+            return redirect('/add_food')
     else:
         form = ApplicationForm()
     return render_template('add_application.html', title='Add Application', form=form)
