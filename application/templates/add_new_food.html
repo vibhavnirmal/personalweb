@@ -1,15 +1,13 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
-<form action="" method="post" enctype="multipart/form-data">
+<form method="POST" action="" class="mt-4" enctype="multipart/form-data">
     {{ form.csrf_token() }}
     <fieldset class="form-group">
+        <legend class="mt-4 mb-4 text-center">Add Food Review</legend>
         {% for field in form %}
             {% if field.name == "submit" %}
-                <div class="form-group">
-                    {{ field(class="btn btn-outline-info btn-lg mt-2") }}
-                </div>
+            <button type="submit" class="btn btn-outline-info btn-lg mt-2">{{ form.submit.label }}</button>
             {% else %}
                 <div class="form-group">
                     {% if field.errors %}

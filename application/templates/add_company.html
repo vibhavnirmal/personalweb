@@ -1,23 +1,20 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
-<form action="" method="post">
+<form method="POST" action="" class="mt-4">
     {{ form.csrf_token() }}
     <fieldset class="form-group">
-
         <legend class="mt-4 mb-4 text-center">Add Company Information</legend>
-        
+
         <!-- for each StringField -->
         {% for field in form %}
             {% if field.type == "StringField" %}
                 <div class="form-group">
-                    <!-- {{ field.label(class="form-control-label mt-1") }} -->
                     {% if field.errors %}
                         {{ field(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
                             {% for error in field.errors %}
-                                <span>{{ error }}</span>
+                            <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
@@ -39,11 +36,9 @@
                     {% endif %}
                 </div>
             {% elif field.type == "SubmitField" %}
-                <div class="form-group" style="text-align: right;">
-                    {{ form.submit(class="btn btn-outline-info mt-3") }}
-                </div>
+                <button type="submit" class="btn btn-outline-info btn-lg mt-2">{{ form.submit.label }}</button>
             {% endif %}
-                
+
 
         {% endfor %}
 
