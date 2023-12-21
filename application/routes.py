@@ -1,4 +1,4 @@
-from application import app, db_mongo_job, db_mongo_food, bucket, my_bucket_name, my_bucket_region
+from application import app, db_mongo_job, db_mongo_food, db_mongo_company, bucket, my_bucket_name, my_bucket_region
 from flask import render_template, request, redirect, flash, make_response, jsonify, send_from_directory
 from .forms import CompanyForm, FoodForm, ApplicationForm
 from datetime import datetime
@@ -41,7 +41,7 @@ def add_company():
             state=form.state.data
             country=form.country.data
 
-            db_mongo_job.company_list.insert_one(
+            db_mongo_company.company_list.insert_one(
                 {
                     'name': name, 
                     'url': url, 
@@ -68,7 +68,7 @@ def view_companies():
     """
     View all companies in the database
     """
-    all_data = db_mongo_job.company_list.find()
+    all_data = db_mongo_company.company_list.find()
     return render_template('view_companies.html', title='View Companies', files=all_data)
 
 @app.route('/add_application', methods=['GET', 'POST'])
@@ -79,33 +79,34 @@ def add_application():
     if request.method == 'POST':
         form = ApplicationForm(request.form)
         if form.validate_on_submit():
-            name=form.name.data
-            url=form.url.data
-            career_page_url=form.career_page_url.data
-            description=form.description.data
-            types=form.types.data
-            city=form.city.data
-            state=form.state.data
-            country=form.country.data
+            name=form.company.data
+            position=form.position.data
+            date=form.date.data
+            # bson.errors.InvalidDocument: cannot encode object: datetime.date(2023, 12, 20), of type: <class 'datetime.date'>
+            date = datetime.combine(date, datetime.min.time())
+            link=form.link.data
+            email_given=form.email_given.data
+            status=form.status.data
+            portal=form.portal.data
+            notes=form.notes.data
 
             db_mongo_job.company_list.insert_one(
                 {
                     'name': name, 
-                    'url': url, 
-                    'career_page_url': career_page_url, 
-                    'description': description, 
-                    'types': types, 
-                    'city': city, 
-                    'state': state, 
-                    'country': country, 
-                    'dateAdded': datetime.utcnow()
+                    'position': position,
+                    'date': date,
+                    'link': link,
+                    'email_given': email_given,
+                    'status': status,
+                    'portal': portal,
+                    'notes': notes
                 }
             )
             
             # flash message is displayed on the next page (index)
-            flash(f'Company {form.name.data} added!', 'success')
+            flash(f'Company {form.company.data} added!', 'success')
 
-            return redirect('/add_food')
+            return redirect('/add_application')
     else:
         form = ApplicationForm()
     return render_template('add_application.html', title='Add Application', form=form)
@@ -115,7 +116,8 @@ def view_applications():
     """
     View all applications in the database
     """
-    return render_template('view_applications.html', title='View Applications')
+    all_data = db_mongo_job.company_list.find()
+    return render_template('view_applications.html', title='View Applications', files=all_data)
 
 
 # related to food I tried

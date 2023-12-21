@@ -30,6 +30,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 try:
     client = MongoClient(creds['mongo_uri'])
 
+    db_mongo_company = client.get_database(creds['company_collection'])
     db_mongo_job = client.get_database(creds['job_application_collection'])
     db_mongo_food = client.get_database(creds['food_data_collection'])
 

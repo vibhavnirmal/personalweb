@@ -37,7 +37,7 @@ class ApplicationForm(FlaskForm):
     position = StringField('Position / Title', render_kw={"placeholder": "Position / Title"})
     date = DateField('Date', render_kw={"placeholder": "Date"})
     link = URLField('Link to Job Posting', render_kw={"placeholder": "Link to Job Posting"})
-    email_given = StringField('Email Given', validators=[DataRequired()], render_kw={"placeholder": "Email Given"})
+    email_given = SelectField('Email Given', choices=[('outlook', 'Outlook'), ('gmail', 'Gmail'), ('proton', 'Proton'), ('other', 'Other')])
     status = SelectField('Status', choices=[('applied', 'Applied'), ('interviewed', 'Interviewed'),
                                             ('rejected', 'Rejected'), ('offer', 'Offer'), ('none', 'None')],
                          validators=[DataRequired()], render_kw={"placeholder": "Status"})

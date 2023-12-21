@@ -2,38 +2,38 @@
 
 {% block content %}
 <div class="container-fluid mt-4">
-    <h1>I have applied here before</h1>
-    <hr>
-    TEMPOARY TABLE
-    <hr>
+    <h4 class="text-center">Companies I am tracking</h4>
     <div class="table-responsive">
         <table id="example" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Company name</th>
+                    <th>Job Link</th>
                     <th>Position</th>
+                    <th>Found at</th>
+                    
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    
 
-                    <td><a href="#"><i class="bi-pencil-square"></i></a></td>
-                    <td><a href="#"><i class="bi-trash"></i></a></td>
-                </tr>
-            </tbody>
-            <tfoot>
+            <tbody>
+                {% for file in files %}
                 <tr>
-                    <th>Name</th>
-                    <th>Position</th>
+                    <td>{{ file.name }}</td>
+                    <td><a href="{{ file.link }}" target="_blank"><i class="bi-link-45deg"></i></a></td>
+                    <td>{{ file.position }}</td>
+                    <td>{{ file.portal }}</td>                    
+
+                    <td><a href="/edit_company/{{ file.id }}"><i class="bi-pencil-square"></i></a></td>
+                    <td><a href="/delete_company/{{ file.id }}"><i class="bi-trash"></i></a></td>
                 </tr>
-            </tfoot>
+                {% endfor %}
+            </tbody>
+
         </table>
     </div>
+
 </div>
 
 {% endblock %}
