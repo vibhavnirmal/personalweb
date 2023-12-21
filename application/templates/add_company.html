@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<form method="POST" action="" class="mt-4">
+<form method="POST" autocomplete="off" action="" class="mt-4">
     {{ form.csrf_token() }}
     <fieldset class="form-group">
         <legend class="mt-4 mb-4 text-center">Add Company Information</legend>
