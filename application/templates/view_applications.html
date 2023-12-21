@@ -8,9 +8,11 @@
             <thead>
                 <tr>
                     <th>Company name</th>
+                    <th>Applied on</th>
                     <th>Job Link</th>
                     <th>Position</th>
                     <th>Found at</th>
+                    
                     
                     <th>Edit</th>
                     <th>Delete</th>
@@ -21,6 +23,8 @@
                 {% for file in files %}
                 <tr>
                     <td>{{ file.name }}</td>
+                    <td id="date">{{ file.date }}</td>
+                    
                     <td><a href="{{ file.link }}" target="_blank"><i class="bi-link-45deg"></i></a></td>
                     <td>{{ file.position }}</td>
                     <td>{{ file.portal }}</td>                    
@@ -29,6 +33,7 @@
                     <td><a href="/delete_application/{{ file.id }}"><i class="bi-trash"></i></a></td>
 
                 </tr>
+                
                 {% endfor %}
             </tbody>
 
@@ -38,3 +43,4 @@
 </div>
 
 {% endblock %}
+

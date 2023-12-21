@@ -83,7 +83,8 @@ def add_application():
             position=form.position.data
             date=form.date.data
             # bson.errors.InvalidDocument: cannot encode object: datetime.date(2023, 12, 20), of type: <class 'datetime.date'>
-            date = datetime.combine(date, datetime.min.time())
+            # date = datetime.combine(date, datetime.min.time())
+            date = datetime.strptime(str(date), '%Y-%m-%d')
             link=form.link.data
             email_given=form.email_given.data
             status=form.status.data
@@ -116,7 +117,8 @@ def view_applications():
     """
     View all applications in the database
     """
-    all_data = db_mongo_job.application.find()
+    all_data = [doc.update({'date': doc['date'].strftime("%B %d, %Y")}) or doc for doc in db_mongo_job.application.find()]
+    
     return render_template('view_applications.html', title='View Applications', files=all_data)
 
 @app.route('/edit_application/<id>', methods=['GET', 'POST'])
