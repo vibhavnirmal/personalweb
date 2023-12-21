@@ -116,8 +116,53 @@ def view_applications():
     """
     View all applications in the database
     """
-    all_data = db_mongo_job.company_list.find()
+    all_data = db_mongo_job.application.find()
     return render_template('view_applications.html', title='View Applications', files=all_data)
+
+@app.route('/edit_application/<id>', methods=['GET', 'POST'])
+def edit_application(id):
+    """
+    Edit an application in the database
+    """
+    if request.method == 'POST':
+        form = ApplicationForm(request.form)
+        if form.validate_on_submit():
+            name=form.company.data
+            position=form.position.data
+            date=form.date.data
+            date = datetime.combine(date, datetime.min.time())
+            link=form.link.data
+            email_given=form.email_given.data
+            status=form.status.data
+            portal=form.portal.data
+            notes=form.notes.data
+
+            db_mongo_job.application.update_one(
+                {
+                    '_id': id
+                },
+                {
+                    '$set': {
+                        'name': name, 
+                        'position': position,
+                        'date': date,
+                        'link': link,
+                        'email_given': email_given,
+                        'status': status,
+                        'portal': portal,
+                        'notes': notes
+                    }
+                }
+            )
+            
+            # flash message is displayed on the next page (index)
+            flash(f'Company {form.company.data} added!', 'success')
+
+            return redirect('/view_applications')
+    else:
+        form = ApplicationForm()
+    return render_template('edit_application.html', title='Edit Application', form=form)
+
 
 
 # related to food I tried
@@ -184,3 +229,14 @@ def too_large(e):
     Error handler for file too large
     """
     return make_response(jsonify(message="File is too large"), 413)
+
+# get flashed messages
+@app.route('/get_flashed_messages')
+def get_flashed_messages():
+    """
+    Get flashed messages
+    """
+    messages = []
+    for message in get_flashed_messages():
+        messages.append(message)
+    return jsonify(messages)

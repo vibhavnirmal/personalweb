@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container-fluid mt-4">
-    <h4 class="text-center">Companies I am tracking</h4>
+    <h4 class="text-center">Applications I am tracking</h4>
     <div class="table-responsive">
         <table id="example" class="table table-striped" style="width:100%">
             <thead>
@@ -25,8 +25,9 @@
                     <td>{{ file.position }}</td>
                     <td>{{ file.portal }}</td>                    
 
-                    <td><a href="/edit_company/{{ file.id }}"><i class="bi-pencil-square"></i></a></td>
-                    <td><a href="/delete_company/{{ file.id }}"><i class="bi-trash"></i></a></td>
+                    <td><a href="/edit_application/{{ file.id }}"><i class="bi-pencil-square"></i></a></td>
+                    <td><a href="/delete_application/{{ file.id }}"><i class="bi-trash"></i></a></td>
+
                 </tr>
                 {% endfor %}
             </tbody>
