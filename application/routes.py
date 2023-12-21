@@ -90,7 +90,7 @@ def add_application():
             portal=form.portal.data
             notes=form.notes.data
 
-            db_mongo_job.company_list.insert_one(
+            db_mongo_job.application.insert_one(
                 {
                     'name': name, 
                     'position': position,
