@@ -9,6 +9,7 @@
                 <tr>
                     <th>Company name</th>
                     <th>Career Link</th>
+                    <th>My Applications</th>
                     <th>City</th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -21,6 +22,8 @@
                     <td><a href="{{ file.url }}" target="_blank">{{ file.name }}</a></td>
                     <td><a href="{{ file.career_page_url }}" target="_blank"><i class="bi-box-arrow-up-right"></i></a>
                     </td>
+                    
+                    <td><a href="/view_applications/{{ file.id }}"><i class="bi-eye"></i></a></td>
 
                     {% if file.city %}
                     <td>{{ file.city }}</td>

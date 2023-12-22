@@ -12,6 +12,7 @@
                     <th>Job Link</th>
                     <th>Position</th>
                     <th>Found at</th>
+                    <th>Current Status</th>
                     
                     
                     <th>Edit</th>
@@ -28,6 +29,7 @@
                     <td><a href="{{ file.link }}" target="_blank"><i class="bi-link-45deg"></i></a></td>
                     <td>{{ file.position }}</td>
                     <td>{{ file.portal }}</td>                    
+                    <td>{{ file.status }}</td>
 
                     <td><a href="/edit_application/{{ file.id }}"><i class="bi-pencil-square"></i></a></td>
                     <td><a href="/delete_application/{{ file.id }}"><i class="bi-trash"></i></a></td>
