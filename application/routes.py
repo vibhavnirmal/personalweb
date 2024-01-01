@@ -30,8 +30,6 @@ def index():
     # get total number of food
     num_food = db_mongo_food.food_list.count_documents({})
 
-    # overView = {}
-
     overView = {
         'Applications I have done': num_applications,
         'Companies in my Database': num_companies,
@@ -39,6 +37,13 @@ def index():
     }
 
     return render_template('dashboard.html', title='Home', overview=overView)
+
+@app.route('/settings')
+def settings():
+    """
+    Settings page
+    """
+    return render_template('settings.html', title='Settings')
 
 # related to job applications
 @app.route('/add_company', methods=['GET', 'POST'])
@@ -99,8 +104,6 @@ def add_application():
             name=form.company.data
             position=form.position.data
             date=form.date.data
-            # bson.errors.InvalidDocument: cannot encode object: datetime.date(2023, 12, 20), of type: <class 'datetime.date'>
-            # date = datetime.combine(date, datetime.min.time())
             date = datetime.strptime(str(date), '%Y-%m-%d')
             link=form.link.data
             email_given=form.email_given.data

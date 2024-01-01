@@ -4,7 +4,7 @@ This personal life tracker web app allows you to gain insights into your daily l
 
 ![](demo.gif)
 
-!![Alt text](demo.png)
+![screenshot](demo.png)
 
 ## Installation
 
