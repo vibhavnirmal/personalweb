@@ -60,11 +60,20 @@
                     </ul>
                 </div> -->
 
+                <div class="navbar-nav ms-auto">
+                    <!-- settings -->
+                    <a href="{{ url_for('settings') }}" class="nav-link">
+                        <i class="bi bi-gear"></i>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-person-circle"></i>
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="nav-link">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </a>
+                    </div>
 
-                <!-- settings  -->
-                <a href="{{ url_for('settings') }}" class="btn btn-light me-2">
-                    <i class="bi bi-gear"></i>
-                </a>
+                    
 
             </div>
 
