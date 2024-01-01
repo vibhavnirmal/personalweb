@@ -53,6 +53,21 @@ def login():
     """
     return render_template('login.html', title='Login')
 
+@app.route('/logout')
+def logout():
+    """
+    Logout page
+    """
+    return render_template('logout.html', title='Logout')
+
+@app.route('/forgot')
+def forgot():
+    """
+    Forgot page
+    """
+    return render_template('forgotpassword.html', title='Forgot')
+
+
 @app.route('/about')
 def about():
     """
