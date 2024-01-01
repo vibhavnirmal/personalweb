@@ -38,6 +38,29 @@ def index():
 
     return render_template('dashboard.html', title='Home', overview=overView)
 
+@app.route('/register')
+def register():
+    """
+    Register page
+    """
+    return render_template('register.html', title='Register')
+
+
+@app.route('/login')
+def login():
+    """
+    Login page
+    """
+    return render_template('login.html', title='Login')
+
+@app.route('/about')
+def about():
+    """
+    About page
+    """
+    return render_template('about.html', title='About')
+
+
 @app.route('/settings')
 def settings():
     """
