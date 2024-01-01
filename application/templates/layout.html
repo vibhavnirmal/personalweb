@@ -66,35 +66,62 @@
     <main class="container-fluid">
         <div class="row">
             <div class="col-md-2">
-                <div class="container-fluid mt-4">
-                    <ul class="nav nav-pills flex-column" id="menu">
-                        <li class="mb-2">
-                            <h4 class="px-0 align-middle">Companies</h4>
-                            <ul class="nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                                <li><a href="{{ url_for('add_company') }}" class="nav-link">Add New Company</a></li>
-                                <li><a href="{{ url_for('view_companies') }}" class="nav-link">View Companies</a></li>
-                            </ul>
-                        </li>
-                        <li class="mb-2">
-                            <h4 class="px-0 align-middle">Applications</h4>
-                            <ul class="nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                                <li><a href="{{ url_for('add_application') }}" class="nav-link">Add New Application</a>
-                                </li>
-                                <li><a href="{{ url_for('view_applications') }}" class="nav-link">View Applications</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="mb-2">
-                            <h4 class="px-0 align-middle">Food Reviews</h4>
-                            <ul class="nav flex-column ms-1" id="submenu4" data-bs-parent="#menu">
-                                <li><a href="{{ url_for('add_new_food') }}" class="nav-link"> Add New Food Review</a>
-                                </li>
-                                <li><a href="{{ url_for('view_food') }}" class="nav-link"> View Food Reviews</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="companies">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Companies
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="companies"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ul class="nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                                    <li><a href="{{ url_for('add_company') }}" class="nav-link">Add New Company</a></li>
+                                    <li><a href="{{ url_for('view_companies') }}" class="nav-link">View Companies</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="applications">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Applications
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="applications"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <ul class="nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                                    <li><a href="{{ url_for('add_application') }}" class="nav-link">Add New Application</a></li>
+                                    <li><a href="{{ url_for('view_applications') }}" class="nav-link">View Applications</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="foodreviews">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Food Reviews
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="foodreviews"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <ul class="nav flex-column ms-1" id="submenu4" data-bs-parent="#menu">
+                                        <li><a href="{{ url_for('add_new_food') }}" class="nav-link"> Add New Food Review</a></li>
+                                        <li><a href="{{ url_for('view_food') }}" class="nav-link"> View Food Reviews</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
+
             <div class="col-md-8">
                 {% block content %}
                 {% endblock %}

@@ -31,6 +31,15 @@ This personal life tracker web app allows you to gain insights into your daily l
 - [ ] Monthly and yearly summaries allow comparison of spending over time.
 - [ ] Export data to a different file formats for further analysis.
 
+##### From MyExpenses.mobi website:
+- [ ] Group your transactions per day, week, month and year
+- [ ] Sum up all your accounts (Sophisticated handling of exchange rates per account and per transaction)
+- [ ] Define how much you intend to spend in yearly, monthly or weekly budgets
+- [ ] Split one transaction to multiple categories
+- [ ] Visualize the distribution per category
+- [ ] Understand how your financial situation evolves over time
+- [ ] Print to PDF and exchange via QIF and CSV
+
 ### Log your food intake:
 - [ ] Record meals and snacks, including name, price, date, location, and an image.
 - [ ] Track calorie intake and analyze dietary patterns (get information of that specific item from the internet).

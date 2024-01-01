@@ -21,7 +21,24 @@ def index():
     """
     Home page
     """
-    return render_template('dashboard.html', title='Home')
+    # get total number of applications
+    num_applications = db_mongo_job.application.count_documents({})
+
+    # get total number of companies
+    num_companies = db_mongo_company.company_list.count_documents({})
+
+    # get total number of food
+    num_food = db_mongo_food.food_list.count_documents({})
+
+    # overView = {}
+
+    overView = {
+        'Applications I have done': num_applications,
+        'Companies in my Database': num_companies,
+        'Total food reviews': num_food
+    }
+
+    return render_template('dashboard.html', title='Home', overview=overView)
 
 # related to job applications
 @app.route('/add_company', methods=['GET', 'POST'])
@@ -90,6 +107,23 @@ def add_application():
             status=form.status.data
             portal=form.portal.data
             notes=form.notes.data
+
+            # check if company exists if not add it
+            if db_mongo_company.company_list.find_one({'name': name}) is None:
+                db_mongo_company.company_list.insert_one(
+                    {
+                        'name': name, 
+                        'url': None, 
+                        'career_page_url': None, 
+                        'description': None, 
+                        'types': None, 
+                        'city': None, 
+                        'state': None, 
+                        'country': None, 
+                        'dateAdded': datetime.utcnow()
+                    }
+                )
+
 
             db_mongo_job.application.insert_one(
                 {
@@ -185,8 +219,11 @@ def add_new_food():
         country=form.country.data
         image_data = request.files['file-to-upload']
 
-        new_filename = secure_filename(image_data.filename)
-        new_filename = str(uuid.uuid4().hex) + "." + new_filename.rsplit('.', 1)[1].lower()
+        if image_data:
+            new_filename = secure_filename(image_data.filename)
+            new_filename = str(uuid.uuid4().hex) + "." + new_filename.rsplit('.', 1)[1].lower()
+        else:
+            new_filename = None
         
         if image_data and allowed_file(image_data.filename):
             bucket.upload_fileobj(image_data, new_filename, ExtraArgs={'ACL': 'public-read'})

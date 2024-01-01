@@ -26,7 +26,6 @@ class FoodForm(FlaskForm):
     state = StringField("State", validators=[DataRequired()], render_kw={"placeholder": "State"})
     country = StringField("Country", validators=[DataRequired()], render_kw={"placeholder": "Country"})
     image = FileField("Image File", 
-                      validators=[FileRequired()], 
                       name="file-to-upload",
                       render_kw={"placeholder": "Image File", "accept": "image/*"})
     submit = SubmitField("Add Food")
