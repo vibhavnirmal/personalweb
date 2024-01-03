@@ -50,7 +50,9 @@ This personal life tracker web app allows you to gain insights into your daily l
 - [ ] Contact information for each company, including website, email(optional), and contact LinkedIn.
 
 ### Company tracker:
-- [ ] Track companies you're interested in, their contact information, and your past interactions (if iterviewed what did they ask and other stuff).
+- [ ] Track companies you're interested in
+  - [x] Their contact information
+  - [ ] Past interactions (if iterviewed what did they ask and other stuff)
 - [ ] (Optional) Allow promotional content from companies that you're interested in to be displayed on the app (if we plan to make it public and get some money from it).
 
 
