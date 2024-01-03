@@ -4,6 +4,7 @@ from .forms import CompanyForm, FoodForm, ApplicationForm
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import uuid
+import json
 
 
 
@@ -185,7 +186,14 @@ def add_application():
             return redirect('/add_application')
     else:
         form = ApplicationForm()
-    return render_template('add_application.html', title='Add Application', form=form)
+
+    # get all companies
+    companies = db_mongo_company.company_list.find()
+
+    # get company names
+    companies = json.dumps([company['name'] for company in companies], default=str)
+
+    return render_template('add_application.html', title='Add Application', form=form, companies=companies)
 
 @app.route('/view_applications')
 def view_applications():

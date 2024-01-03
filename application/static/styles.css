@@ -7,7 +7,6 @@
 
 
 /* Autocomplete CSS */
-
 .autocomplete {
     /*the container must be positioned relative:*/
     position: relative;
@@ -23,11 +22,15 @@
 }
 
 .autocomplete-items div {
-    font-size: 14px;
-    padding-left: 10px;
-    padding-right: 10px;
+    font-size: 18px;
+    padding: 10px;
     cursor: pointer;
     background-color: #fff;
+    /* border-bottom: 1px solid #d4d4d4; */
+    width: min(25vw, 300px);
+}
+
+.autocomplete-items div:last-child {
     border-bottom: 1px solid #d4d4d4;
 }
 

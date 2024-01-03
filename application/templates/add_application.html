@@ -9,7 +9,6 @@
             {% if field.name == 'submit' %}
                 <button type="submit" class="btn btn-outline-info btn-lg mt-2">{{ form.submit.label }}</button>
             {% else %}
-
             <div class="form-group row">
                 <div class="col-md-3">
                     {% if field.name == 'date' %}
@@ -31,6 +30,24 @@
             </div>
             {% endif %}
         {% endfor %}
+
+        {% block javascript %}
+
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script>
+            $(document).ready(function(){
+                var listofcompanies = '{{ companies }}';
+                // remove &#34; from all companies
+                listofcompanies = listofcompanies.replace(/&#34;/g, '"');
+                listofcompanies = JSON.parse(listofcompanies);
+
+                document.getElementById("company").autocomplete = 'off';
+
+                autocomplete(document.getElementById("company"), listofcompanies);
+            });           
+        </script>
+        {% endblock %}
+
     </fieldset>
 </form>
 
