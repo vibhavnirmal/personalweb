@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, FileField, FloatField, SelectField, DateField, URLField
+from wtforms import StringField, SubmitField, TextAreaField, FileField, FloatField, SelectField, DateField, URLField, PasswordField
 from wtforms.validators import DataRequired
 from flask_wtf.file import FileField, FileRequired
 
@@ -46,3 +46,8 @@ class ApplicationForm(FlaskForm):
                         validators=[DataRequired()], render_kw={"placeholder": "Portal"})
     notes = TextAreaField('Notes', render_kw={"placeholder": "Notes"})
     submit = SubmitField('Submit')
+
+class LoginForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired()], render_kw={"placeholder": "Username"})
+    password = PasswordField("Password", validators=[DataRequired()], render_kw={"placeholder": "Password"})
+    submit = SubmitField("Login")

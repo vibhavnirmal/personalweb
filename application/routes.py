@@ -1,11 +1,10 @@
 from application import app, db_mongo_job, db_mongo_food, db_mongo_company, bucket, my_bucket_name, my_bucket_region
 from flask import render_template, request, redirect, flash, make_response, jsonify, send_from_directory
-from .forms import CompanyForm, FoodForm, ApplicationForm
+from .forms import CompanyForm, FoodForm, ApplicationForm, LoginForm
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import uuid
 import json
-
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -47,19 +46,32 @@ def register():
     return render_template('register.html', title='Register')
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     """
     Login page
     """
-    return render_template('login.html', title='Login')
+    if request.method == 'POST':
+        form = LoginForm(request.form)
+        if form.validate_on_submit():
+            username =form.username.data
+            password =form.password.data
+
+            app.logger.info(f'Username: {username} Password: {password}')
+            
+            # if username == "root" and password == "root":
+            return redirect('/')
+            # else:
+            #     flash(f'Invalid Credentials!', 'danger')
+            #     return redirect('/login', form=form)
+    else:
+        form = LoginForm()
+
+    return render_template('login.html', title='Login', form=form)
 
 @app.route('/logout')
 def logout():
-    """
-    Logout page
-    """
-    return render_template('logout.html', title='Logout')
+    return redirect('/login')
 
 @app.route('/forgot')
 def forgot():

@@ -5,6 +5,11 @@
     transition: all 0.3s ease-in-out;
 }
 
+.navIcons{
+    font-size: 22px;
+    margin-right: 10px;
+}
+
 
 /* Autocomplete CSS */
 .autocomplete {
