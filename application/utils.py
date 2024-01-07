@@ -1,6 +1,12 @@
 from nltk.corpus import stopwords
+import matplotlib
+matplotlib.use('Agg')
+# this is needed to avoid error: _tkinter.TclError: no display name and no $DISPLAY environment variable
 import matplotlib.pyplot as plt
+
 import io
+
+
 
 class JobDescUtils:
     def __init__(self):
@@ -57,13 +63,13 @@ class JobDescUtils:
         # plot keyword frequency
         top_keywords = self.get_top_keywords(keyword_freq, top_n)
 
-        plt.figure(figsize=(10, 10))
+        plt.figure(figsize=(10, 7))
         plt.bar([x[0] for x in top_keywords], [x[1] for x in top_keywords])
-        plt.xticks(rotation=90)
+        plt.xticks(rotation=45)
         plt.xlabel('Keywords')
         plt.ylabel('Frequency')
         plt.title('Keyword Frequency')
-        
+
         # return jpeg image to show in html
         buf = io.BytesIO()
         plt.savefig(buf, format='jpeg')
