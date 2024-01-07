@@ -46,7 +46,7 @@ This personal life tracker web app allows you to gain insights into your daily l
 - [ ] Rate experience with each food item / Location that you tried that for future reference (stars or score out of 10).
 
 ### Application tracker:
-- [ ] Track companies one has applied to, position applied for, application date, and status.
+- [x] Track companies one has applied to, position applied for, application date, and status.
 - [ ] Contact information for each company, including website, email(optional), and contact LinkedIn.
 
 ### Company tracker:

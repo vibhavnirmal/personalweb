@@ -6,22 +6,87 @@
 
 <div class="container-fluid">
     <div class="table-responsive">
-      <table class="table table-striped"> <thead>
-          <tr>
-            <th scope="col">Key</th>
-            <th scope="col">Count</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for key, value in overview.items() %}
-          <tr>
-            <td>{{ key }}</td>
-            <td>{{ value }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Key</th>
+                    <th scope="col">Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value in overview.items() %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>{{ value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-  </div>
+</div>
+
+<div class="container-fluid mt-3 mb-3">
+    <h4>Top 10 Keywords</h4>
+    <div class="row">
+        <div class="col-md-8">
+        {% if img is not none %}
+            <!-- bytesIO -->
+            <img src="data:image/png;base64,{{ img }}" class="img-fluid" alt="Insights Chart">
+        {% endif %}
+        </div>
+        <div class="col-md-4">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Key</th>
+                            <th scope="col">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topx">
+                        
+                    </tbody>
+                </table>
+            </div>
+    </div>
+</div>
+
+<!-- 
+{% for key, value in keyword_freq.items() %}
+{% if value > 3 %}
+<span>{{ key }}: {{ value }}</span>
+<br>
+{% endif %}
+{% endfor %}
+ -->
+
+
+
+
+{% block scripts %}
+
+<script>
+    const keywordFreq = JSON.parse('{{ keyword_freq|tojson }}');
+
+    // Use a more descriptive variable name
+    const topKeywords = Object.entries(keywordFreq)
+      .sort(([, a], [, b]) => b - a)  // Sort by value in descending order
+      .slice(0, 10)
+      .map(([key, value]) => ({ key, value })); // Create an array of objects
+    
+    console.log(topKeywords);
+    
+    const topxTable = document.getElementById("topx");
+    
+    // Use forEach for a cleaner loop
+    topKeywords.forEach((keyword, index) => {
+      const row = topxTable.insertRow(index);
+      row.insertCell(0).textContent = keyword.key;  // Use textContent for security
+      row.insertCell(1).textContent = keyword.value;
+    });
+</script>
+
+
+{% endblock %}
 
 {% endblock %}

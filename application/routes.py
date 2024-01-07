@@ -5,7 +5,11 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import uuid
 import json
+from .utils import JobDescUtils
+import base64
 
+
+descUtils = JobDescUtils()
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
@@ -35,8 +39,20 @@ def index():
         'Companies in my Database': num_companies,
         'Total food reviews': num_food
     }
+    # get notes
+    notes = [doc['notes'] for doc in db_mongo_job.application.find()]
 
-    return render_template('dashboard.html', title='Home', overview=overView)
+    keywords = descUtils.extract_keywords(notes)
+    keyword_freq = descUtils.get_keyword_freq(keywords)
+
+    img = descUtils.plot_keyword_freq(keyword_freq, 15)
+
+    # image is in bytes
+    # convert to base64
+    img = base64.b64encode(img.getvalue()).decode('utf-8')
+
+
+    return render_template('dashboard.html', title='Home', overview=overView, keyword_freq=keyword_freq, img=img)
 
 @app.route('/register')
 def register():
@@ -213,6 +229,13 @@ def view_applications():
     View all applications in the database
     """
     all_data = [doc.update({'date': doc['date'].strftime("%B %d, %Y")}) or doc for doc in db_mongo_job.application.find()]
+
+    # # get notes
+    # notes = [doc['notes'] for doc in db_mongo_job.application.find()]
+
+    # keywords = descUtils.extract_keywords(notes)
+
+    # insights = descUtils.get_insights(keywords)
     
     return render_template('view_applications.html', title='View Applications', files=all_data)
 
