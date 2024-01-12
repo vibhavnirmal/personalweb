@@ -112,7 +112,7 @@ function autocomplete(inp, arr) {
 var jsonCountryStateCity = null;
 
 $.ajax({
-    url: "static/countryStateCity.json",
+    url: "/static/countryStateCity.json",
     dataType: 'json',
     async: false,
     success: function (data) {
@@ -120,5 +120,10 @@ $.ajax({
     }
 });
 
-var countries = jsonCountryStateCity.map(function (country) { return country.name; });
-autocomplete(document.getElementById("country"), countries);
+if (jsonCountryStateCity == null) {
+    console.log("Error loading json file");
+}else{
+    console.log("json file loaded");
+    var countries = jsonCountryStateCity.map(function (country) { return country.name; });
+    autocomplete(document.getElementById("country"), countries);
+}

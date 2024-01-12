@@ -6,13 +6,13 @@ from flask_wtf.file import FileField, FileRequired
 
 class CompanyForm(FlaskForm):
     name = StringField("Company Name", validators=[DataRequired()], render_kw={"placeholder": "Company Name"})
-    url = StringField("Company URL", validators=[DataRequired()], render_kw={"placeholder": "Company URL"})
-    career_page_url = StringField("Career Page URL", validators=[DataRequired()], render_kw={"placeholder": "Career Page URL"})
+    url = StringField("Company URL", render_kw={"placeholder": "Company URL"})
+    career_page_url = StringField("Career Page URL", render_kw={"placeholder": "Career Page URL"})
     description = TextAreaField("Description", render_kw={"placeholder": "Description"})
     types = StringField("Types",  render_kw={"placeholder": "Types"})
     city = StringField("City",  render_kw={"placeholder": "City"})
     state = StringField("State",  render_kw={"placeholder": "State"})
-    country = StringField("Country", validators=[DataRequired()], render_kw={"placeholder": "Country"})
+    country = StringField("Country", render_kw={"placeholder": "Country"})
     submit = SubmitField("Add Company")
 
 
