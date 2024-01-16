@@ -1,5 +1,5 @@
-from application import app, db_mongo_job, db_mongo_food, db_mongo_company, bucket, my_bucket_name, my_bucket_region
-from flask import render_template, request, redirect, flash, make_response, jsonify, send_from_directory
+from application import app, db_mongo_job, db_mongo_food, db_mongo_company, db_mongo_keywords, bucket, my_bucket_name, my_bucket_region
+from flask import render_template, request, redirect, flash, make_response, jsonify, send_from_directory, url_for, get_flashed_messages
 from .forms import CompanyForm, FoodForm, ApplicationForm, LoginForm
 from datetime import datetime
 from werkzeug.utils import secure_filename
@@ -50,7 +50,15 @@ def index():
     # convert to base64
     img = base64.b64encode(img.getvalue()).decode('utf-8')
 
-    return render_template('dashboard.html', title='Home', overview=overView, keyword_freq=keyword_freq, img=img)
+    """
+    To add "location" in all companies
+    # db_mongo_company.company_list.update_many({}, {'$set': {'location': None}})
+    """
+
+    # get all keywords
+    concepts = db_mongo_keywords.kw.find()  
+
+    return render_template('dashboard.html', title='Home', overview=overView, keyword_freq=keyword_freq, img=img, json_data=concepts)
 
 @app.route('/register')
 def register():
@@ -76,7 +84,6 @@ def login():
             # if username == "root" and password == "root":
             return redirect('/')
             # else:
-            #     flash(f'Invalid Credentials!', 'danger')
             #     return redirect('/login', form=form)
     else:
         form = LoginForm()
@@ -148,7 +155,13 @@ def add_company():
             return redirect('/add_company')
     else:
         form = CompanyForm()
-    return render_template('add_company.html', title='Add Company', form=form)
+
+    # get all company types
+    companies = db_mongo_company.company_types.find()
+    types = json.dumps([company['types'] for company in companies], default=str)
+
+
+    return render_template('add_company.html', title='Add Company', form=form, types=types)
 
 def countAppsPerCompany():
     """
@@ -215,11 +228,12 @@ def edit_company(name):
             # flash message is displayed on the next page (index)
             flash(f'Company {form.name.data} added!', 'success')
 
-            return redirect('/view_companies')
+            return redirect(url_for('view_companies'))
     else:
         form = CompanyForm()
         # set form values
         company = db_mongo_company.company_list.find_one({'name': name})
+
         form.name.data = company['name']
         form.url.data = company['url']
         form.career_page_url.data = company['career_page_url']
@@ -229,9 +243,9 @@ def edit_company(name):
         form.state.data = company['state']
         form.country.data = company['country']
 
+    mutypes = json.dumps([comp['types'] for comp in db_mongo_company.company_types.find()], default=str)
 
-
-    return render_template('edit_company.html', title='Edit Company', form=form)
+    return render_template('edit_company.html', title='Edit Company', form=form, types=mutypes)
 
 @app.route('/delete_company/<name>', methods=['GET', 'POST'])
 def delete_company(name):
@@ -250,6 +264,72 @@ def delete_company(name):
         }
     )
     return redirect('/view_companies')
+
+@app.route('/edit_application/<name>/<position>', methods=['GET', 'POST'])
+def edit_application(name, position):
+    """
+    Edit an application in the database
+    """
+    if request.method == 'POST':
+        form = ApplicationForm(request.form)
+        if form.validate_on_submit():
+            name=form.company.data
+            position=form.position.data
+            date=form.date.data
+            date = datetime.strptime(str(date), '%Y-%m-%d')
+            link=form.link.data
+            email_given=form.email_given.data
+            status=form.status.data
+            portal=form.portal.data
+            notes=form.notes.data
+
+            db_mongo_job.application.update_one(
+                {
+                    'name': name,
+                    'position': position
+                },
+                {
+                    '$set': {
+                        'name': name, 
+                        'position': position,
+                        'date': date,
+                        'link': link,
+                        'email_given': email_given,
+                        'status': status,
+                        'portal': portal,
+                        'notes': notes
+                    }
+                }
+            )
+            
+            # flash message is displayed on the next page (index)
+            flash(f'Company {form.company.data} added!', 'success')
+
+            return redirect('/view_applications')
+    else:
+        form = ApplicationForm()
+        # set form values
+        
+        name = name.replace("%20", " ")
+        position = position.replace("%20", " ")        
+
+        application = db_mongo_job.application.find_one({'name': name, 'position': position})
+        form.company.data = application['name']
+        form.position.data = application['position']
+        form.date.data = application['date']
+        form.link.data = application['link']
+        form.email_given.data = application['email_given']
+        form.status.data = application['status']
+        form.portal.data = application['portal']
+        form.notes.data = application['notes']
+
+    # get all companies
+    companies = db_mongo_company.company_list.find()
+
+    # get company names
+    companies = json.dumps([company['name'] for company in companies], default=str)
+
+    return render_template('edit_application.html', title='Edit Application', form=form, companies=companies)
 
 @app.route('/delete_application/<name>/<position>', methods=['GET', 'POST'])
 def delete_application(name, position):

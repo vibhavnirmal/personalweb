@@ -42,6 +42,19 @@
 
         {% endfor %}
 
+        {% block javascript %}
+
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script>
+            $(document).ready(function(){
+                var listoftypes = '{{ types }}';
+
+                document.getElementById("types").autocomplete = 'off';
+
+                autocomplete(document.getElementById("types"), listoftypes);
+            });           
+        </script>
+        {% endblock %}
 
     </fieldset>
 

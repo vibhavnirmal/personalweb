@@ -5,7 +5,7 @@
 <div class="container-fluid mt-4">
     <h4 class="text-center">Food I have tried</h4>
     <div class="table-responsive">
-        <table id="example" class="table table-striped" style="width:100%">
+        <table id="example" class="table table-striped align-middle" style="width:100%">
             <thead>
                 <tr>
                     <th>Date</th>
@@ -27,7 +27,11 @@
                         <td>{{ file.brand }}</td>
                         <td>{{ file.price }}</td>
                         <td>
-                            <img src="https://{{ bucket }}.s3.{{ region }}.amazonaws.com/{{ file.image_data }}" class="img-fluid img-thumbnail mx-auto d-block vin-img">
+                            <!-- on click view image modal -->
+                            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal" 
+                                data-image-url="https://{{ bucket }}.s3.{{ region }}.amazonaws.com/{{ file.image_data }}">
+                                <img id="foodImg" src="https://{{ bucket }}.s3.{{ region }}.amazonaws.com/{{ file.image_data }}" class="img-fluid img-thumbnail mx-auto d-block vin-img" alt="{{ file.name }}">
+                            </button>
                         </td>
                         
                         {% if file.count %}
@@ -36,8 +40,21 @@
                             <td>0</td>
                         {% endif %}
 
-                        <td><a href="/edit_food/{{ file.id }}"><i class="bi-pencil-square"></i></a></td>
-                        <td><a href="/delete_food/{{ file.id }}"><i class="bi-trash"></i></a></td>
+                        <td>
+                            <a href="/edit_food/{{ file.id }}">
+                                <button class="btn btn-primary btn-sm" type="button">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="/delete_food/{{ file.id }}">
+                                <button class="btn btn-danger btn-sm" type="button">
+                                    <i class="bi bi-trash"></i>
+                                </button>   
+                            </a>
+                        </td>
         
                     </tr>
                 {% endfor %}
@@ -48,5 +65,38 @@
 
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 9999;">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img id="foodImgModal" src="" alt="food image" class="img-fluid vin-img">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+        var imageButtons = document.querySelectorAll('button[data-bs-toggle="modal"]');
+        var foodImgModal = document.getElementById('foodImgModal');
+
+
+        
+        imageButtons.forEach(function(button) {
+            button.addEventListener("click", function() {
+                var imageUrl = button.getAttribute('data-image-url');
+                if (imageUrl) {
+                    foodImgModal.src = imageUrl;
+                } else {
+                    foodImgModal.src = "";
+                }
+                modal.show();
+            });
+        });
+    };
+    
+</script>
 
 {% endblock %}

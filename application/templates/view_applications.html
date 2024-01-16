@@ -4,7 +4,7 @@
 <div class="container-fluid mt-4">
     <h4 class="text-center">Applications I am tracking</h4>
     <div class="table-responsive">
-        <table id="example" class="table table-striped" style="width:100%">
+        <table id="example" class="table table-striped align-middle" style="width:100%">
             <thead>
                 <tr>
                     <th>Company name</th>
@@ -21,6 +21,7 @@
 
             <tbody>
                 {% for file in files %}
+                {% if file.deleted == false %}
                 <tr>
                     <td>{{ file.name }}</td>
                     <td id="date">{{ file.date }}</td>
@@ -30,11 +31,23 @@
                     <td>{{ file.portal }}</td>                    
                     <td>{{ file.status }}</td>
 
-                    <td><a href="/edit_application/{{ file.id }}"><i class="bi-pencil-square"></i></a></td>
-                    <td><a href="/delete_application/{{ file.id }}"><i class="bi-trash"></i></a></td>
+                    <td>
+                        <a href="{{ url_for('edit_application', name=file.name, position=file.position) }}">
+                            <button class="btn btn-primary btn-sm" type="button" id="editApplication">
+                                <i class="bi-pencil-square"></i>
+                            </button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('delete_application', name=file.name, position=file.position) }}">
+                            <button class="btn btn-danger btn-sm" type="button" id="deleteApplication">
+                                <i class="bi-trash"></i>
+                            </button>
+                        </a>
+                    </td>
 
                 </tr>
-                
+                {% endif %}                
                 {% endfor %}
             </tbody>
 
@@ -43,5 +56,20 @@
 
 </div>
 
-{% endblock %}
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    //once everything is loaded on the page, run this function to search {{ name }} in the datatable
+    $(document).ready(function () {
+        var table = $('#example').DataTable();
+        table.search("{{ name }}").draw();
+    });
+    
+</script>
+
+{% endblock %}

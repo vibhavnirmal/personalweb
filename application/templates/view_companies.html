@@ -4,13 +4,12 @@
 <div class="container-fluid mt-4">
     <h4 class="text-center">Companies I am tracking</h4>
     <div class="table-responsive">
-        <table id="example" class="table table-striped align-middle
-        " style="width:100%">
+        <table id="example" class="table table-striped align-middle" style="width:100%">
             <thead>
                 <tr>
                     <th>Company name</th>
                     <th>Career Link</th>
-                    <th>Total Applications</th>
+                    <th>Applications</th>
                     <th>City</th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -27,9 +26,12 @@
                                 class="bi-box-arrow-up-right"></i>'|safe }}</a>
                     </td>
 
-                    <td>{{ applications[file.name]|default(0, true) }}
+                    <td>
+                        {{ applications[file.name]|default(0, true) }} 
                         <a href="{{ url_for('view_applications_by_company', name=file.name) }}">
-                            {{ '<i class="bi-box-arrow-up-right"></i>'|safe }}
+                            <button class="btn btn-secondary btn-sm" type="button" id="viewApplications"> 
+                                {{ '<i class="bi-eye"></i>'|safe }}
+                            </button>
                         </a>
                     </td>
 

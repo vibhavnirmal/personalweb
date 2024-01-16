@@ -3,6 +3,7 @@
 {% block content %}
 <form method="POST" autocomplete="off" action="" class="mt-4">
     {{ form.csrf_token() }}
+    <p> {{ types }} </p>
     <fieldset class="form-group">
         <legend class="mt-4 mb-4 text-center">Update Company Information</legend>
 
@@ -45,6 +46,21 @@
         <a href="{{ url_for('view_companies') }}" class="btn btn-outline-secondary btn-lg mt-2">
             Back to View All Companies
         </a>
+
+        {% block javascript %}
+
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script>
+            $(document).ready(function(){
+                var listoftypes = '{{ types }}';
+
+                document.getElementById("types").autocomplete = 'off';
+
+                autocomplete(document.getElementById("types"), listoftypes);
+            });           
+        </script>
+        {% endblock %}
+
     </fieldset>
 
 </form>

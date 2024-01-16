@@ -4,10 +4,10 @@
 <form method="POST" action="" class="mt-4">
     <!-- {{ form.csrf_token() }} -->
     <fieldset class="form-group">
-        <legend class="mt-4 mb-4 text-center">Applied Here</legend>
+        <legend class="mt-4 mb-4 text-center">Edit Application</legend>
         {% for field in form %}
             {% if field.name == 'submit' %}
-                <button type="submit" class="btn btn-outline-info btn-lg mt-2">{{ form.submit.label }}</button>
+                <button type="submit" class="btn btn-outline-info btn-lg mt-2">Update Application</button>
             {% else %}
 
             <div class="form-group row">
@@ -31,6 +31,9 @@
             </div>
             {% endif %}
         {% endfor %}
+        <a href="{{ url_for('view_applications') }}" class="btn btn-outline-secondary btn-lg mt-2">
+            Back to View All Applications
+        </a>
     </fieldset>
 </form>
 
