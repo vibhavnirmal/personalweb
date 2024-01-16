@@ -26,7 +26,15 @@
                     <td>{{ file.name }}</td>
                     <td id="date">{{ file.date }}</td>
                     
-                    <td><a href="{{ file.link }}" target="_blank"><i class="bi-link-45deg"></i></a></td>
+                    <td>
+                        <a href="{{ file.link }}" target="_blank">
+                            <button class="brn btn-primary btn-sm" type="button" id="jobLink">
+                                <i class="bi-link-45deg"></i>
+                            </button>
+                        </a>
+                    </td>
+
+
                     <td>{{ file.position }}</td>
                     <td>{{ file.portal }}</td>                    
                     <td>{{ file.status }}</td>

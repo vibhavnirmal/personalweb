@@ -73,3 +73,27 @@
     max-height: 500px;
     object-fit: contain;
 }
+
+.kw {
+    display: inline-flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin: 4px;
+}
+
+.keyword {
+    font-weight: bold;
+    color: #2b83e0;
+}
+
+.count {
+    font-size: 0.8em;
+    color: #6c757d;
+    margin-left: 5px;
+}
+
+.divider {
+    margin-left: 3px;
+}
