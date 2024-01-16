@@ -56,7 +56,7 @@ def index():
     """
 
     # get all keywords
-    concepts = db_mongo_keywords.kw.find()  
+    concepts = db_mongo_keywords.kw.find()
 
     return render_template('dashboard.html', title='Home', overview=overView, keyword_freq=keyword_freq, img=img, json_data=concepts)
 
@@ -361,6 +361,11 @@ def add_application():
         if form.validate_on_submit():
             name=form.company.data
             position=form.position.data
+
+            # if position contains / replace with -
+            if "/" in position:
+                position = position.replace("/", "-")
+
             date=form.date.data
             date = datetime.strptime(str(date), '%Y-%m-%d')
             link=form.link.data
