@@ -1,4 +1,4 @@
-.navIcons{
+.navIcons {
     font-size: 22px;
     margin-right: 10px;
 }
@@ -59,7 +59,7 @@
     padding: 10px;
 }
 
-#foodImg{
+#foodImg {
     width: 120px;
     height: 120px;
     object-fit: cover;

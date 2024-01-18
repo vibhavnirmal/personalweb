@@ -65,11 +65,8 @@
 // Retrieve and parse JSON data
 const keywordFreq = JSON.parse('{{ keyword_freq|tojson }}');
 
-// Sort the keyword frequency in descending order and select the top 10
-let topKeywordss = Object.entries(keywordFreq)
-  .sort(([, a], [, b]) => b - a)
-  .slice(0, 10)
-  .map(([key, value]) => ({ key, value }));
+// Sort the keyword frequency in descending order and get the top 15
+let topKeywordss = Object.entries(keywordFreq).sort(([, a], [, b]) => b - a).slice(0, 15).map(([key, value]) => ({ key, value }));
 
 const hashTag = document.querySelector(".hashtag");
 

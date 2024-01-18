@@ -37,12 +37,13 @@
         <script>
             $(document).ready(function(){
                 var listofcompanies = '{{ companies }}';
+
                 // remove &#34; from all companies
                 listofcompanies = listofcompanies.replace(/&#34;/g, '"');
                 listofcompanies = JSON.parse(listofcompanies);
+                console.log(listofcompanies);
 
                 document.getElementById("company").autocomplete = 'off';
-
                 autocomplete(document.getElementById("company"), listofcompanies);
             });           
         </script>

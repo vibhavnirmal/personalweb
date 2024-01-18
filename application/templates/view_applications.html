@@ -1,8 +1,41 @@
 {% extends "layout.html" %}
 
 {% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="{{ url_for('static', filename='css/counters.css') }}" rel="stylesheet">
+
+
 <div class="container-fluid mt-4">
     <h4 class="text-center">Applications I am tracking</h4>
+    <hr>
+    <div class="row text-center">
+        <div class="col-md-3 mb-3">
+            <div class="panel cnts">
+                <div class="under-number">Total Applications</div>
+                <div class="totalapps">12</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="panel cnts">
+                <div class="under-number">Not selected</div>
+                <div class="totalNS">23</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="panel cnts">
+                <div class="under-number">Got Interviews from</div>
+                <div class="gotIntFrom">23</div>
+            </div>
+        </div>   
+        <div class="col-md-3 mb-3">
+            <div class="panel cnts">
+                <div class="under-number">Waiting for response</div>
+                <div class="WaitingForResp">13</div>
+            </div>
+        </div>
+    </div>
+
     <div class="table-responsive">
         <table id="example" class="table table-striped align-middle" style="width:100%">
             <thead>
@@ -13,7 +46,7 @@
                     <th>Position</th>
                     <th>Found at</th>
                     <th>Current Status</th>
-                    
+
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -25,7 +58,7 @@
                 <tr>
                     <td>{{ file.name }}</td>
                     <td id="date">{{ file.date }}</td>
-                    
+
                     <td>
                         <a href="{{ file.link }}" target="_blank">
                             <button class="brn btn-primary btn-sm" type="button" id="jobLink">
@@ -36,7 +69,7 @@
 
 
                     <td>{{ file.position }}</td>
-                    <td>{{ file.portal }}</td>                    
+                    <td>{{ file.portal }}</td>
                     <td>{{ file.status }}</td>
 
                     <td>
@@ -55,7 +88,7 @@
                     </td>
 
                 </tr>
-                {% endif %}                
+                {% endif %}
                 {% endfor %}
             </tbody>
 
@@ -76,8 +109,39 @@
     $(document).ready(function () {
         var table = $('#example').DataTable();
         table.search("{{ name }}").draw();
+        
+        var countApplied = 0;
+        table.rows().every(function () {
+            if (this.data()[5] == "Applied") {
+                countApplied++;
+            }
+        });
+        $('.WaitingForResp').eq(0).text(countApplied);
+        
+        var countNotSelected = 0;
+        table.rows().every(function () {
+            if (this.data()[5] == "Not Selected") {
+                countNotSelected++;
+            }
+        });
+        $('.totalNS').eq(0).text(countNotSelected);
+
+        var countGotInterview = 0;
+        table.rows().every(function () {
+            if (this.data()[5] == "Interviewed") {
+                countGotInterview++;
+            }
+        });
+        $('.gotIntFrom').eq(0).text(countGotInterview);
+
+        var countTotal = 0;
+        table.rows().every(function () {
+            countTotal++;
+        });
+        $('.totalapps').eq(0).text(countTotal);
     });
-    
+
+
 </script>
 
 {% endblock %}
