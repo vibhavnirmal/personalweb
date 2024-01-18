@@ -297,7 +297,7 @@ def edit_application(name, position):
                         'email_given': email_given,
                         'status': status,
                         'portal': portal,
-                        'notes': notes
+                        'notes': notes,
                     }
                 }
             )
@@ -373,6 +373,10 @@ def add_application():
             status=form.status.data
             portal=form.portal.data
             notes=form.notes.data
+            deleted=False
+
+            # get last application id and increment by 1
+            application_id = db_mongo_job.application.find_one(sort=[("application_id", -1)])['application_id'] + 1
 
             # check if company exists if not add it
             if db_mongo_company.company_list.find_one({'name': name}) is None:
@@ -400,7 +404,9 @@ def add_application():
                     'email_given': email_given,
                     'status': status,
                     'portal': portal,
-                    'notes': notes
+                    'notes': notes,
+                    'deleted': deleted,
+                    'application_id': application_id
                 }
             )
             
