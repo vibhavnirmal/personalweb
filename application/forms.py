@@ -51,3 +51,8 @@ class LoginForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()], render_kw={"placeholder": "Username"})
     password = PasswordField("Password", validators=[DataRequired()], render_kw={"placeholder": "Password"})
     submit = SubmitField("Login")
+
+class WeightTrackerForm(FlaskForm):
+    weight = FloatField("Weight", validators=[DataRequired()], render_kw={"placeholder": "Weight"})
+    date = DateField("Date", render_kw={"placeholder": "Date"})
+    submit = SubmitField("Submit")

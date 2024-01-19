@@ -34,6 +34,7 @@ try:
     db_mongo_job = client.get_database(creds['job_application_collection'])
     db_mongo_food = client.get_database(creds['food_data_collection'])
     db_mongo_keywords = client.get_database(creds['keywords_collection'])
+    db_mongo_weight = client.get_database(creds['weight_collection'])
 
     s3 = boto3.resource(creds['amazon_service'],
                         aws_access_key_id= creds['aws_access_key_id'],

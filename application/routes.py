@@ -1,6 +1,6 @@
-from application import app, db_mongo_job, db_mongo_food, db_mongo_company, db_mongo_keywords, bucket, my_bucket_name, my_bucket_region
+from application import app, db_mongo_job, db_mongo_food, db_mongo_company, db_mongo_keywords, db_mongo_weight, bucket, my_bucket_name, my_bucket_region
 from flask import render_template, request, redirect, flash, make_response, jsonify, send_from_directory, url_for, get_flashed_messages
-from .forms import CompanyForm, FoodForm, ApplicationForm, LoginForm
+from .forms import CompanyForm, FoodForm, ApplicationForm, LoginForm, WeightTrackerForm
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import uuid
@@ -537,3 +537,37 @@ def page_not_found(e):
     Error handler for page not found
     """
     return render_template('404.html', title='404'), 404
+
+
+@app.route('/log_weight', methods=['GET', 'POST'])
+def log_weight():
+    """
+    Log weight
+    """
+    if request.method == 'POST':
+        form = WeightTrackerForm(request.form)
+        if form.validate_on_submit():
+            weight = form.weight.data
+            date = form.date.data
+
+            # convert date to datetime
+            date = datetime.strptime(str(date), '%Y-%m-%d')
+
+            db_mongo_weight.weight_tracker.insert_one(
+                {
+                    'weight': weight,
+                    'date': date
+                }
+            )
+
+            flash(f'Weight {form.weight.data} added!', 'success')
+
+            return redirect('/log_weight')
+    else:
+        form = WeightTrackerForm()
+
+        # get all weight data
+        weight_data = db_mongo_weight.weight_tracker.find()
+
+
+    return render_template('weight_tracker.html', title='Log Weight', form=form, weight_data=weight_data)
