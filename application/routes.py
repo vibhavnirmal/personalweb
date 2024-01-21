@@ -55,6 +55,97 @@ def index():
     # db_mongo_company.company_list.update_many({}, {'$set': {'location': None}})
     """
 
+    # create backup of company_list
+    # companies = db_mongo_company.company_list.find()
+    # for company in companies:
+    #     db_mongo_company.company_list_backup.insert_one(company)
+    
+    # check if all companies have location -> city, state, country if not add it
+    # companies = db_mongo_company.company_list.find()
+    # for company in companies:
+    #     if company['location'] is None:
+    #         db_mongo_company.company_list.update_one(
+    #             {
+    #                 'name': company['name']
+    #             },
+    #             {
+    #                 '$set': {
+    #                     'location': {
+    #                         'city': company['city'],
+    #                         'state': company['state'],
+    #                         'country': company['country']
+    #                     }
+    #                 }
+    #             }
+    #         )
+    #         print(f'Added location for {company["name"]}')
+
+    # remove city, state, country from company
+    # db_mongo_company.company_list.update_many({}, {'$unset': {'city': "", 'state': "", 'country': ""}})
+
+    # if location does not exist add it (removed all locations which had values as well. Will have to add city, state, country again)
+    # companies = db_mongo_company.company_list.find()
+    # for company in companies:
+    #     for key in company:
+    #         print(key)
+    #         if key == 'location':
+    #             pass
+    #         else:
+    #             db_mongo_company.company_list.update_one(
+    #                 {
+    #                     'name': company['name']
+    #                 },
+    #                 {
+    #                     '$set': {
+    #                         'location': {
+    #                             'city': None,
+    #                             'state': None,
+    #                             'country': None
+    #                         }
+    #                     }
+    #                 }
+    #             )
+    #             print(f'Added location for {company["name"]}')
+
+    # if company_id does not exist add it
+    # companies = db_mongo_company.company_list.find()
+    # for company in companies:
+    #     if 'company_id' not in company:
+    #         db_mongo_company.company_list.update_one(
+    #             {
+    #                 'name': company['name']
+    #             },
+    #             {
+    #                 '$set': {
+    #                     'company_id': 0
+    #                 }
+    #             }
+    #         )
+    #         print(f'Added company_id for {company["name"]}')
+
+    # update company_id starting from 0
+    # company_id_start = 1
+    # companies = db_mongo_company.company_list.find()
+    # for company in companies:
+    #     db_mongo_company.company_list.update_one(
+    #         {
+    #             'name': company['name']
+    #         },
+    #         {
+    #             '$set': {
+    #                 'company_id': company_id_start
+    #             }
+    #         }
+    #     )
+    #     company_id_start += 1
+    #     print(f'Updated company_id for {company["name"]}')
+
+    # revert comapny_list to company_list_backup
+    # db_mongo_company.company_list.drop()
+    # companies = db_mongo_company.company_list_backup.find()
+    # for company in companies:
+    #     db_mongo_company.company_list.insert_one(company)  
+
     # get all keywords
     concepts = db_mongo_keywords.kw.find()
 
@@ -135,6 +226,22 @@ def add_company():
             state=form.state.data
             country=form.country.data
 
+            location = {}
+
+            if city:
+                location['city'] = city
+            if state:
+                location['state'] = state
+            if country:
+                location['country'] = country
+
+            try:
+                company_id = db_mongo_company.company_list.find_one(
+                        sort=[("company_id", -1)]
+                    )['company_id'] + 1
+            except:
+                company_id = 0
+
             db_mongo_company.company_list.insert_one(
                 {
                     'name': name, 
@@ -142,10 +249,11 @@ def add_company():
                     'career_page_url': career_page_url, 
                     'description': description, 
                     'types': types, 
-                    'city': city, 
-                    'state': state, 
-                    'country': country, 
-                    'dateAdded': datetime.utcnow()
+                    'location': location,
+                    'company_id': company_id,
+                    'deleted': False,
+                    'dateAdded': datetime.utcnow(),
+                    'dateUpdated': datetime.utcnow()
                 }
             )
             
@@ -207,6 +315,15 @@ def edit_company(name):
             state=form.state.data
             country=form.country.data
 
+            location = {}
+
+            if city:
+                location['city'] = city
+            if state:
+                location['state'] = state
+            if country:
+                location['country'] = country
+
             db_mongo_company.company_list.update_one(
                 {
                     'name': name
@@ -217,10 +334,9 @@ def edit_company(name):
                         'url': url, 
                         'career_page_url': career_page_url, 
                         'description': description, 
-                        'types': types, 
-                        'city': city, 
-                        'state': state, 
-                        'country': country
+                        'types': types,
+                        'location': location,
+                        'dateUpdated': datetime.utcnow()
                     }
                 }
             )
@@ -239,11 +355,19 @@ def edit_company(name):
         form.career_page_url.data = company['career_page_url']
         form.description.data = company['description']
         form.types.data = company['types']
-        form.city.data = company['city']
-        form.state.data = company['state']
-        form.country.data = company['country']
 
-    mutypes = json.dumps([comp['types'] for comp in db_mongo_company.company_types.find()], default=str)
+        form.city.data = company['location']['city']
+        form.state.data = company['location']['state']
+        form.country.data = company['location']['country']
+
+    # get all company types
+    listOfTypes = []
+    companies = db_mongo_company.company_types.find()
+    for company in companies:
+        listOfTypes.append(company['types'])
+    mutypes = json.dumps(listOfTypes, default=str)
+
+    print(mutypes)
 
     return render_template('edit_company.html', title='Edit Company', form=form, types=mutypes)
 
@@ -378,6 +502,14 @@ def add_application():
             # get last application id and increment by 1
             application_id = db_mongo_job.application.find_one(sort=[("application_id", -1)])['application_id'] + 1
 
+            # company_id 
+            try:
+                company_id = db_mongo_company.company_list.find_one(
+                        sort=[("company_id", -1)]
+                    )['company_id'] + 1
+            except:
+                company_id = 0
+
             # check if company exists if not add it
             if db_mongo_company.company_list.find_one({'name': name}) is None:
                 db_mongo_company.company_list.insert_one(
@@ -386,11 +518,17 @@ def add_application():
                         'url': None, 
                         'career_page_url': None, 
                         'description': None, 
-                        'types': None, 
-                        'city': None, 
-                        'state': None, 
-                        'country': None, 
-                        'dateAdded': datetime.utcnow()
+                        'types': None,
+                        'location': {
+                            'city': None,
+                            'state': None,
+                            'country': None
+                        },
+                        'company_id': company_id,
+                        'deleted': False,
+                        'dateAdded': datetime.utcnow(),
+                        'dateUpdated': datetime.utcnow()
+
                     }
                 )
 
@@ -529,15 +667,12 @@ def get_flashed_messages():
         messages.append(message)
     return jsonify(messages)
 
-
-# if path is not found
 @app.errorhandler(404)
 def page_not_found(e):
     """
     Error handler for page not found
     """
     return render_template('404.html', title='404'), 404
-
 
 @app.route('/log_weight', methods=['GET', 'POST'])
 def log_weight():

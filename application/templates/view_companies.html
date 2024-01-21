@@ -7,6 +7,7 @@
         <table id="example" class="table table-striped align-middle" style="width:100%">
             <thead>
                 <tr>
+                    <th>id</th>
                     <th>Company name</th>
                     <th>Career Link</th>
                     <th>Applications</th>
@@ -20,6 +21,7 @@
                 {% for file in files %}
                 {% if file.deleted == false %}
                 <tr>
+                    <td>{{ file.company_id }}</td>
                     <td><a href="{{ file.url }}" target="_blank">{{ file.name }}</a></td>
                     <td>
                         <a href="{{ file.career_page_url }}" target="_blank">{{ '<i
@@ -35,7 +37,7 @@
                         </a>
                     </td>
 
-                    <td>{{ file.city|default('Not available', true) }}</td>
+                    <td>{{ file.location.city|default('Not available', true) }}</td>
 
                     <td>
                         <a href="{{ url_for('edit_company', name=file.name) }}">
