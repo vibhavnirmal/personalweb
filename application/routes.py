@@ -123,6 +123,42 @@ def index():
     #         )
     #         print(f'Added company_id for {company["name"]}')
 
+    # if application_id does not exist add it
+    # applications = db_mongo_job.application.find()
+    # for application in applications:
+    #     if 'application_id' not in application:
+    #         db_mongo_job.application.update_one(
+    #             {
+    #                 'name': application['name'],
+    #                 'position': application['position']
+    #             },
+    #             {
+    #                 '$set': {
+    #                     'application_id': 0
+    #                 }
+    #             }
+    #         )
+    #         print(f'Added application_id for {application["name"]}')
+
+    # update application_id starting from 0
+    # application_id_start = 1
+    # applications = db_mongo_job.application.find()
+    # for application in applications:
+    #     db_mongo_job.application.update_one(
+    #         {
+    #             'name': application['name'],
+    #             'position': application['position']
+    #         },
+    #         {
+    #             '$set': {
+    #                 'application_id': application_id_start
+    #             }
+    #         }
+    #     )
+    #     application_id_start += 1
+    #     print(f'Updated application_id for {application["name"]}')
+    
+
     # update company_id starting from 0
     # company_id_start = 1
     # companies = db_mongo_company.company_list.find()
@@ -144,7 +180,23 @@ def index():
     # db_mongo_company.company_list.drop()
     # companies = db_mongo_company.company_list_backup.find()
     # for company in companies:
-    #     db_mongo_company.company_list.insert_one(company)  
+    #     db_mongo_company.company_list.insert_one(company)
+
+    # if 'dateUpdated' does not exist add it
+    # companies = db_mongo_company.company_list.find()
+    # for company in companies:
+    #     if 'dateUpdated' not in company:
+    #         db_mongo_company.company_list.update_one(
+    #             {
+    #                 'name': company['name']
+    #             },
+    #             {
+    #                 '$set': {
+    #                     'dateUpdated': company['dateAdded']
+    #                 }
+    #             }
+    #         )
+    #         print(f'Added dateUpdated for {company["name"]}')
 
     # get all keywords
     concepts = db_mongo_keywords.kw.find()
@@ -498,11 +550,14 @@ def add_application():
             portal=form.portal.data
             notes=form.notes.data
             deleted=False
-
-            # get last application id and increment by 1
-            application_id = db_mongo_job.application.find_one(sort=[("application_id", -1)])['application_id'] + 1
-
-            # company_id 
+            
+            try:
+                application_id = db_mongo_job.application.find_one(
+                        sort=[("application_id", -1)]
+                    )['application_id'] + 1
+            except:
+                application_id = 0
+            
             try:
                 company_id = db_mongo_company.company_list.find_one(
                         sort=[("company_id", -1)]
@@ -510,27 +565,29 @@ def add_application():
             except:
                 company_id = 0
 
-            # check if company exists if not add it
-            if db_mongo_company.company_list.find_one({'name': name}) is None:
-                db_mongo_company.company_list.insert_one(
-                    {
-                        'name': name, 
-                        'url': None, 
-                        'career_page_url': None, 
-                        'description': None, 
-                        'types': None,
-                        'location': {
-                            'city': None,
-                            'state': None,
-                            'country': None
-                        },
-                        'company_id': company_id,
-                        'deleted': False,
-                        'dateAdded': datetime.utcnow(),
-                        'dateUpdated': datetime.utcnow()
+            add_company_if_id_does_not_exist(company_id, name)
 
-                    }
-                )
+            # check if company exists if not add it
+            # if db_mongo_company.company_list.find_one({'name': name}) is None:
+            #     db_mongo_company.company_list.insert_one(
+            #         {
+            #             'name': name, 
+            #             'url': None, 
+            #             'career_page_url': None, 
+            #             'description': None, 
+            #             'types': None,
+            #             'location': {
+            #                 'city': None,
+            #                 'state': None,
+            #                 'country': None
+            #             },
+            #             'company_id': company_id,
+            #             'deleted': False,
+            #             'dateAdded': datetime.utcnow(),
+            #             'dateUpdated': datetime.utcnow()
+
+            #         }
+            #     )
 
 
             db_mongo_job.application.insert_one(
@@ -563,12 +620,61 @@ def add_application():
 
     return render_template('add_application.html', title='Add Application', form=form, companies=companies)
 
+
+def add_company_if_id_does_not_exist(id, name):
+    default_company_doc = {
+        'url': None,
+        'career_page_url': None,
+        'description': None,
+        'types': None,
+        'location': {
+            'city': None,
+            'state': None,
+            'country': None
+        },
+        'deleted': False,
+        'dateAdded': datetime.utcnow(),
+        'dateUpdated': datetime.utcnow()
+    }
+
+    db_mongo_company.company_list.update_one(
+        {'name': name},
+        {'$setOnInsert': {
+            'name': name,
+            'company_id': id,
+            **default_company_doc
+        }},
+        upsert=True
+    )
+
+    # if db_mongo_company.company_list.find_one({'name': name}) is None:
+    #     db_mongo_company.company_list.insert_one(
+    #         {
+    #             'name': name, 
+    #             'url': None, 
+    #             'career_page_url': None, 
+    #             'description': None, 
+    #             'types': None,
+    #             'location': {
+    #                 'city': None,
+    #                 'state': None,
+    #                 'country': None
+    #             },
+    #             'company_id': id,
+    #             'deleted': False,
+    #             'dateAdded': datetime.utcnow(),
+    #             'dateUpdated': datetime.utcnow()
+
+    #         }
+    #     )
+
+
 @app.route('/view_applications')
 def view_applications():
     """
     View all applications in the database
     """
-    all_data = [doc.update({'date': doc['date'].strftime("%B %d, %Y")}) or doc for doc in db_mongo_job.application.find()]
+    all_data = [doc.update({'date': doc['date'].strftime("%m/%d/%Y")}) or doc for doc in db_mongo_job.application.find()]
 
     # # get notes
     # notes = [doc['notes'] for doc in db_mongo_job.application.find()]
