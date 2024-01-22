@@ -9,29 +9,37 @@
 <div class="container-fluid mt-4">
     <h4 class="text-center">Applications I am tracking</h4>
     <hr>
-    <div class="row text-center">
+    <div class="row">
         <div class="col-md-3 mb-3">
-            <div class="panel cnts">
-                <div class="under-number">Total Applications</div>
-                <div class="totalapps">12</div>
+            <div class="panel">
+                <button class="btn cnts" type="button" id="totApps">
+                    <span id="wrt">Total Applications</span>
+                    <span class="totalapps" id="counterr">0</span>
+                </button>
             </div>
         </div>
         <div class="col-md-3 mb-3">
-            <div class="panel cnts">
-                <div class="under-number">Not selected</div>
-                <div class="totalNS">23</div>
+            <div class="panel">
+                <button class="btn cnts" type="button" id="notSel">
+                    <span id="wrt">Not selected</span>
+                    <span class="totalNS" id="counterr">0</span>
+                </button>
             </div>
         </div>
         <div class="col-md-3 mb-3">
-            <div class="panel cnts">
-                <div class="under-number">Got Interviews from</div>
-                <div class="gotIntFrom">23</div>
+            <div class="panel">
+                <button class="btn cnts" type="button" id="ints">
+                    <span id="wrt">Got Interviews from</span>
+                    <span class="gotIntFrom" id="counterr">0</span>
+                </button>
             </div>
         </div>   
         <div class="col-md-3 mb-3">
-            <div class="panel cnts">
-                <div class="under-number">Waiting for response</div>
-                <div class="WaitingForResp">13</div>
+            <div class="panel">
+                <button class="btn cnts" type="button" id="applied">
+                    <div id="wrt">Waiting for response</div>
+                    <div class="WaitingForResp" id="counterr">0</div>
+                </button>
             </div>
         </div>
     </div>
@@ -46,7 +54,6 @@
                     <th>Position</th>
                     <th>Found at</th>
                     <th>Current Status</th>
-
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
@@ -66,7 +73,6 @@
                             </button>
                         </a>
                     </td>
-
 
                     <td>{{ file.position }}</td>
                     <td>{{ file.portal }}</td>
@@ -108,7 +114,10 @@
     //once everything is loaded on the page, run this function to search {{ name }} in the datatable
     $(document).ready(function () {
         var table = $('#example').DataTable();
+
+        '{% if name %}'
         table.search("{{ name }}").draw();
+        '{% endif %}'
         
         var countApplied = 0;
         table.rows().every(function () {
@@ -139,6 +148,30 @@
             countTotal++;
         });
         $('.totalapps').eq(0).text(countTotal);
+
+        // '{% for file in files %}'
+        // var date = new Date('{{ file.date }}');
+        // date = date.toLocaleDateString();
+        // console.log(date);
+        // '{% endfor %}'
+
+
+        // if button is clicked, change text to draw table
+        $('#applied').click(function () {
+            table.search("Applied").draw();
+        });
+
+        $('#notSel').click(function () {
+            table.search("Not Selected").draw();
+        });
+
+        $('#ints').click(function () {
+            table.search("Interviewed").draw();
+        });
+
+        $('#totApps').click(function () {
+            table.search("").draw();
+        });
     });
 
 

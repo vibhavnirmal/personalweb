@@ -1,7 +1,28 @@
 .cnts{
+    width: 100%;
     padding: 10px;
     background-color: #20b057;
     color: aliceblue;
     border-radius: 5px;
     font-size: 18px;
+}
+
+.cnts:hover{
+    background-color: #1a8e48;
+    color: aliceblue;
+    border-radius: 5px;
+    font-size: 18px;
+}
+
+#wrt{
+    float: left;
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+#counterr{
+    float: right;
+    margin-right: 10px;
+    font-size: 20px;
+    font-weight: bold;
 }
