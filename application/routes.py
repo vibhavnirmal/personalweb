@@ -1,4 +1,4 @@
-from application import app, db_mongo_job, db_mongo_food, db_mongo_company, db_mongo_keywords, db_mongo_weight, bucket, my_bucket_name, my_bucket_region
+from application import app, db_mongo_job, db_mongo_food, db_mongo_company, db_mongo_keywords, db_mongo_weight, bucket, my_bucket_name, my_bucket_region, extractor, pdf_extractor
 from flask import render_template, request, redirect, flash, make_response, jsonify, send_from_directory, url_for, get_flashed_messages
 from .forms import CompanyForm, FoodForm, ApplicationForm, LoginForm, WeightTrackerForm
 from datetime import datetime
@@ -317,11 +317,13 @@ def add_company():
         form = CompanyForm()
 
     # get all company types
-    companies = db_mongo_company.company_types.find()
-    types = json.dumps([company['types'] for company in companies], default=str)
+    # companies = db_mongo_company.company_types.find()
+    # types = json.dumps([company['types'] for company in companies], default=str)
 
+    listofstates, listofcities = getStatesAndCities()
+    typesT = getTypesOfCompanies()
 
-    return render_template('add_company.html', title='Add Company', form=form, types=types)
+    return render_template('add_company.html', title='Add Company', form=form, types=typesT, states=listofstates, cities=listofcities)
 
 def countAppsPerCompany():
     """
@@ -371,10 +373,18 @@ def edit_company(name):
 
             if city:
                 location['city'] = city
+            else:
+                location['city'] = None
+
             if state:
                 location['state'] = state
+            else:
+                location['state'] = None
+
             if country:
                 location['country'] = country
+            else:
+                location['country'] = None
 
             db_mongo_company.company_list.update_one(
                 {
@@ -412,16 +422,45 @@ def edit_company(name):
         form.state.data = company['location']['state']
         form.country.data = company['location']['country']
 
-    # get all company types
+    typesT = getTypesOfCompanies()
+
+    listofstates, listofcities = getStatesAndCities()
+    
+    return render_template('edit_company.html', title='Edit Company', form=form, states=listofstates, cities=listofcities, types=typesT)
+
+def getStatesAndCities():
+    """
+    Get all states and cities
+    """
+    listofstates = []
+    listofcities = []
+
+    # get all states
+    locations = db_mongo_company.company_list.find({}, {'location': 1, '_id': 0})
+    for location in locations:
+        if location['location']['state'] not in listofstates and location['location']['state'] is not None:
+            listofstates.append(location['location']['state'])
+        if location['location']['city'] not in listofcities and location['location']['city'] is not None:
+            listofcities.append(location['location']['city'])
+
+    listofstates = json.dumps(listofstates, default=str)
+    listofcities = json.dumps(listofcities, default=str)
+
+    return listofstates, listofcities
+
+
+def getTypesOfCompanies():
+    """
+    Get all types of companies
+    """
     listOfTypes = []
     companies = db_mongo_company.company_types.find()
     for company in companies:
         listOfTypes.append(company['types'])
-    mutypes = json.dumps(listOfTypes, default=str)
+    typesT = json.dumps(listOfTypes, default=str)
 
-    print(mutypes)
+    return typesT
 
-    return render_template('edit_company.html', title='Edit Company', form=form, types=mutypes)
 
 @app.route('/delete_company/<name>', methods=['GET', 'POST'])
 def delete_company(name):
@@ -499,13 +538,15 @@ def edit_application(name, position):
         form.portal.data = application['portal']
         form.notes.data = application['notes']
 
+        extracted_keywords = extractor.extract_keywords(application['notes'])
+
     # get all companies
     companies = db_mongo_company.company_list.find()
 
     # get company names
     companies = json.dumps([company['name'] for company in companies], default=str)
 
-    return render_template('edit_application.html', title='Edit Application', form=form, companies=companies)
+    return render_template('edit_application.html', title='Edit Application', form=form, companies=companies, kws=extracted_keywords)
 
 @app.route('/delete_application/<name>/<position>', methods=['GET', 'POST'])
 def delete_application(name, position):

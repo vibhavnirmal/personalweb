@@ -3,6 +3,7 @@
 {% block content %}
 <form method="POST" action="" class="mt-4">
     <!-- {{ form.csrf_token() }} -->
+    {{ kws }}
     <fieldset class="form-group">
         <legend class="mt-4 mb-4 text-center">Edit Application</legend>
         {% for field in form %}
