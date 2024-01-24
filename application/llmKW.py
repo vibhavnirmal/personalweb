@@ -30,8 +30,6 @@ class PDFExtractor:
         self.num_workers = num_workers
         self.processor = NougatProcessor.from_pretrained("facebook/nougat-base")
         self.model = VisionEncoderDecoderModel.from_pretrained("facebook/nougat-base")
-
-        device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model.to(device)
 
     def extract_text(self, filepath):
