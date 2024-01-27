@@ -36,6 +36,12 @@
         <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
         <script>
             $(document).ready(function(){
+
+                // Setting Default date to today
+                var today = new Date();
+                today.setHours(today.getHours() - 6);
+                $('#date').val(today.toISOString().slice(0,10));
+
                 var listofcompanies = '{{ companies }}';
 
                 // remove &#34; from all companies
