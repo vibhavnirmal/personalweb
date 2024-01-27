@@ -8,28 +8,37 @@ from pymongo import MongoClient
 import boto3
 from .llmKW import KeyWordExtractor, PDFExtractor
 import torch
+import psycopg2
+
+
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 extractor = KeyWordExtractor(device=device, num_workers=4)
 pdf_extractor = PDFExtractor(device=device, num_workers=4)
 
 def read_credentials(filename):
-    """
-    Read credentials from a file
-    """
     with open(filename) as json_file:
         creds = json.load(json_file)
     return creds
 
-
 creds = read_credentials('credentials.json')
+
+DB_HOST = creds['host']
+DB_NAME = creds['database']
+DB_USER = creds['user']
+DB_PASS = creds['password']
+DB_PORT = creds['port']
+
+con = psycopg2.connect(database=DB_NAME, user=DB_USER, password=DB_PASS, host=DB_HOST, port=DB_PORT)
+
+if con:
+    print("Connected Successfully")
 
 my_bucket_name = creds['bucket_name']
 my_bucket_region = creds['bucket_region']
 
 app = Flask(__name__)
-# app.secret_key= my_app_secret_key
-app.secret_key = creds
+app.secret_key = creds['app_secret_key']
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 try:
