@@ -10,8 +10,6 @@ from .llmKW import KeyWordExtractor, PDFExtractor
 import torch
 import psycopg2
 
-
-
 device = "cuda" if torch.cuda.is_available() else "cpu"
 extractor = KeyWordExtractor(device=device, num_workers=4)
 pdf_extractor = PDFExtractor(device=device, num_workers=4)

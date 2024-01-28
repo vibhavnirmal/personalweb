@@ -1,13 +1,13 @@
-from application import app, db_mongo_job, db_mongo_food, db_mongo_company, db_mongo_keywords, db_mongo_weight, bucket, my_bucket_name, my_bucket_region, extractor, pdf_extractor
+from application import app, db_mongo_job, db_mongo_food, db_mongo_company, db_mongo_keywords, db_mongo_weight, bucket, my_bucket_name, my_bucket_region, extractor, pdf_extractor, con
 from flask import render_template, request, redirect, flash, make_response, jsonify, send_from_directory, url_for, get_flashed_messages
 from .forms import CompanyForm, FoodForm, ApplicationForm, LoginForm, WeightTrackerForm
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import uuid
 import json
+from .queries import create_tables, insert_dummy
 from .utils import JobDescUtils
 import base64
-
 
 descUtils = JobDescUtils()
 
@@ -198,6 +198,27 @@ def index():
     #         )
     #         print(f'Added dateUpdated for {company["name"]}')
 
+    app_table, company_table, location_table = create_tables()
+    insert_loc, insert_comp, insert_app = insert_dummy()
+
+    # create tables if not exist
+    if con:
+        with con.cursor() as cur:
+            cur.execute(location_table)
+            cur.execute(company_table)
+            cur.execute(app_table)
+
+            # check if data exists in tables
+            cur.execute("SELECT * FROM locations")
+            if cur.fetchone() is None:
+                cur.execute(insert_loc)
+                cur.execute(insert_comp)
+                cur.execute(insert_app)
+            
+            con.commit()
+            cur.close()
+
+
     # get all keywords
     concepts = db_mongo_keywords.kw.find()
 
@@ -384,7 +405,7 @@ def edit_company(name):
             if country:
                 location['country'] = country
             else:
-                location['country'] = None
+                location['country'] = None           
 
             db_mongo_company.company_list.update_one(
                 {
@@ -523,8 +544,7 @@ def edit_application(name, position):
             return redirect('/view_applications')
     else:
         form = ApplicationForm()
-        # set form values
-        
+
         name = name.replace("%20", " ")
         position = position.replace("%20", " ")        
 
@@ -538,15 +558,10 @@ def edit_application(name, position):
         form.portal.data = application['portal']
         form.notes.data = application['notes']
 
-        extracted_keywords = extractor.extract_keywords(application['notes'])
-
-    # get all companies
     companies = db_mongo_company.company_list.find()
-
-    # get company names
     companies = json.dumps([company['name'] for company in companies], default=str)
 
-    return render_template('edit_application.html', title='Edit Application', form=form, companies=companies, kws=extracted_keywords)
+    return render_template('edit_application.html', title='Edit Application', form=form, companies=companies)
 
 @app.route('/delete_application/<name>/<position>', methods=['GET', 'POST'])
 def delete_application(name, position):
@@ -591,6 +606,8 @@ def add_application():
             portal=form.portal.data
             notes=form.notes.data
             deleted=False
+
+            extracted_keywords = extractor.extract_keywords(notes)
             
             try:
                 application_id = db_mongo_job.application.find_one(
@@ -607,29 +624,6 @@ def add_application():
                 company_id = 0
 
             add_company_if_id_does_not_exist(company_id, name)
-
-            # check if company exists if not add it
-            # if db_mongo_company.company_list.find_one({'name': name}) is None:
-            #     db_mongo_company.company_list.insert_one(
-            #         {
-            #             'name': name, 
-            #             'url': None, 
-            #             'career_page_url': None, 
-            #             'description': None, 
-            #             'types': None,
-            #             'location': {
-            #                 'city': None,
-            #                 'state': None,
-            #                 'country': None
-            #             },
-            #             'company_id': company_id,
-            #             'deleted': False,
-            #             'dateAdded': datetime.utcnow(),
-            #             'dateUpdated': datetime.utcnow()
-
-            #         }
-            #     )
-
 
             db_mongo_job.application.insert_one(
                 {
@@ -688,27 +682,6 @@ def add_company_if_id_does_not_exist(id, name):
         upsert=True
     )
 
-    # if db_mongo_company.company_list.find_one({'name': name}) is None:
-    #     db_mongo_company.company_list.insert_one(
-    #         {
-    #             'name': name, 
-    #             'url': None, 
-    #             'career_page_url': None, 
-    #             'description': None, 
-    #             'types': None,
-    #             'location': {
-    #                 'city': None,
-    #                 'state': None,
-    #                 'country': None
-    #             },
-    #             'company_id': id,
-    #             'deleted': False,
-    #             'dateAdded': datetime.utcnow(),
-    #             'dateUpdated': datetime.utcnow()
-
-    #         }
-    #     )
-
 
 @app.route('/view_applications')
 def view_applications():
@@ -716,13 +689,6 @@ def view_applications():
     View all applications in the database
     """
     all_data = [doc.update({'date': doc['date'].strftime("%m/%d/%Y")}) or doc for doc in db_mongo_job.application.find()]
-
-    # # get notes
-    # notes = [doc['notes'] for doc in db_mongo_job.application.find()]
-
-    # keywords = descUtils.extract_keywords(notes)
-
-    # insights = descUtils.get_insights(keywords)
     
     return render_template('view_applications.html', title='View Applications', files=all_data)
 
@@ -847,9 +813,8 @@ def log_weight():
             return redirect('/log_weight')
     else:
         form = WeightTrackerForm()
-
+        
         # get all weight data
         weight_data = db_mongo_weight.weight_tracker.find()
-
 
     return render_template('weight_tracker.html', title='Log Weight', form=form, weight_data=weight_data)
