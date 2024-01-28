@@ -46,19 +46,27 @@
             Back to View All Companies
         </a>
 
-        <!-- types not working currently -->
-
         {% block javascript %}
 
         <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
         <script>
             $(document).ready(function(){
-                var listoftypes = '{{ types }}';
+                var listofstates = '{{ states }}';
+                var listofcities = '{{ cities }}';
 
-                document.getElementById("types").autocomplete = 'off';
+                // remove &#34; from all companies
+                listofstates = listofstates.replace(/&#34;/g, '"');
+                listofcities = listofcities.replace(/&#34;/g, '"');
+                listofstates = JSON.parse(listofstates);
+                listofcities = JSON.parse(listofcities);
+                // console.log(listofstates);
+                // console.log(listofcities);
 
-                autocomplete(document.getElementById("types"), listoftypes);
-            });           
+                document.getElementById("state").autocomplete = 'off';
+                document.getElementById("city").autocomplete = 'off';
+                autocomplete(document.getElementById("state"), listofstates);
+                autocomplete(document.getElementById("city"), listofcities);
+            });
         </script>
         {% endblock %}
 
