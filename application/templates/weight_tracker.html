@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+<div class="row">
+
+    <div class="col-md-3">
+
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.csrf_token() }}
+            <fieldset class="form-group">
+                <legend class="mt-4 mb-4 text-center">Log Weight</legend>
+                {% for field in form %}
+                {% if field.name == "submit" %}
+                <button type="submit" class="btn btn-outline-info btn-lg mt-2">{{ form.submit.label }}</button>
+                {% else %}
+                <div class="form-group">
+                    {% if field.errors %}
+                    {{ field(class="form-control form-control-lg is-invalid mt-2") }}
+                    <div class="invalid-feedback">
+                        {% for error in field.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ field(class="form-control form-control-lg mt-2") }}
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% endfor %}
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-9">
+
+        {% for data in weight_data %}
+        <span>Weight: {{ data.weight|safe + " Lbs" }} | Date: {{ data.date }}</span>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

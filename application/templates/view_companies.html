@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <h4 class="text-center">Companies I am tracking</h4>
+    <div class="table-responsive">
+        <table id="example" class="table table-striped align-middle" style="width:100%">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Company name</th>
+                    <th>Career Link</th>
+                    <th>Applications</th>
+                    <th>City</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for file in files %}
+                {% if file.deleted == false %}
+                <tr>
+                    <td>{{ file.id }}</td>
+                    <td><a href="{{ file.url }}" target="_blank">{{ file.company_name }}</a></td>
+                    <td>
+                        <a href="{{ file.career_page_url }}" target="_blank">{{ '<i
+                                class="bi-box-arrow-up-right"></i>'|safe }}</a>
+                    </td>
+
+                    <td>
+                        {{ applications[file.company_name]|default(0, true) }} 
+                        <a href="{{ url_for('my_applications.view_applications', company_name=file.company_name) }}" target="_blank">
+                            <button class="btn btn-secondary btn-sm" type="button" id="viewApplications"> 
+                                {{ '<i class="bi-eye"></i>'|safe }}
+                            </button>
+                        </a>
+                    </td>
+
+                    <td>{{ file.location.city|default('Not available', true) }}</td>
+
+                    <td>
+                        <a href="#">
+                            <button class="btn btn-primary btn-sm" type="button" id="editCompany">
+                                {{ '<i class="bi-pencil-square"></i>'|safe }}
+                            </button>
+                        </a>    
+                    </td>
+                    <td>
+                        <a href="#">
+                            <button class="btn btn-danger btn-sm" type="button" id="deleteCompany">
+                                {{ '<i class="bi-trash"></i>'|safe }}
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+<!-- not working -->
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+<script>
+    //once everything is loaded on the page, if delete button is clicked, show a confirmation dialog
+    $(document).ready(function () {
+        $('#deleteCompany').click(function () {
+            alert("Do you want to delete this company?");
+            
+        });
+    });
+</script>
+
+{% endblock %}

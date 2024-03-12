@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<form method="POST" action="" class="mt-4">
+    <!-- {{ form.csrf_token() }} -->
+    {{ kws }}
+    <fieldset class="form-group">
+        <legend class="mt-4 mb-4 text-center">Edit Application</legend>
+        {% for field in form %}
+            {% if field.name == 'submit' %}
+                <button type="submit" class="btn btn-outline-info btn-lg mt-2">Update Application</button>
+            {% else %}
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    {% if field.name == 'date' %}
+                        <label for="date" class="form-control-label mt-3">Date Applied</label>
+                    {% elif field.name != 'csrf_token' %}
+                        {{ field.label(class="form-control-label mt-3") }}
+                    {% endif %}
+                </div>
+                <div class="col-md-9">
+                    {{ field(class="form-control form-control-lg mt-1") }}
+                    {% if field.errors %}
+                    <ul class="errors">
+                        {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>  
+            </div>
+            {% endif %}
+        {% endfor %}
+        <a href="{{ url_for('my_applications.view_applications') }}" class="btn btn-outline-secondary btn-lg mt-2">
+            Back to View All Applications
+        </a>
+    </fieldset>
+</form>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<form method="POST" autocomplete="off" action="" class="mt-4">
+    {{ form.csrf_token() }}
+    <fieldset class="form-group">
+        <legend class="mt-4 mb-4 text-center">Add Company Information</legend>
+
+        {% if get_flashed_messages(with_categories=True) %}
+            {% for category, message in get_flashed_messages(with_categories=True) %}
+                <span id="flashedError">{{ message }}</span>
+            {% endfor %}
+        {% endif %}
+
+        <!-- for each StringField -->
+        {% for field in form %}
+            {% if field.type == "StringField" %}
+                <div class="form-group">
+                    {% if field.errors %}
+                        {{ field(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in field.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ field(class="form-control form-control-lg mt-2") }}
+                    {% endif %}
+                </div>
+            {% elif field.type== "TextAreaField" %}
+                <div class="form-group">
+                    <!-- {{ field.label(class="form-control-label mt-1") }} -->
+                    {% if field.errors %}
+                        {{ field(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in field.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ field(class="form-control form-control-lg mt-2") }}
+                    {% endif %}
+                </div>
+            {% elif field.type == "SubmitField" %}
+                <button type="submit" class="btn btn-outline-info btn-lg mt-2">{{ form.submit.label }}</button>
+            {% endif %}
+
+
+        {% endfor %}
+
+        {% block javascript %}
+
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script>
+            $(document).ready(function(){
+                var listoftypes = '{{ types }}';
+
+                document.getElementById("types").autocomplete = 'off';
+
+                autocomplete(document.getElementById("types"), listoftypes);
+            });           
+        </script>
+        {% endblock %}
+
+    </fieldset>
+
+</form>
+
+{% endblock %}

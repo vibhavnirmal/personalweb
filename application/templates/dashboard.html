@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h3>Overview</h3>
+
+<div class="container-fluid">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Key</th>
+                    <th scope="col">Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key, value in overview.items() %}
+                <tr>
+                    <td>{{ key }}</td>
+                    <td>{{ value }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="container-fluid mt-3 mb-3">
+    <h4>Top 10 Keywords</h4>
+    <div class="row">
+        <div class="col-md-9">
+        {% if img is not none %}
+            <!-- bytesIO -->
+            <img src="data:image/png;base64,{{ img }}" class="img-fluid" alt="Insights Chart">
+        {% endif %}
+        </div>
+        <div class="col-md-3">
+            <!-- show keyword and count side by side in a capsule -->
+            <div class="hashtag">
+                <!-- <div class="kw">
+                    <span class="keyword">#bootstrap</span>
+                    <span class="divider">|</span>
+                    <span class="count">12</span> 
+                </div> -->
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% block scripts %}
+
+<script>
+// Retrieve and parse JSON data
+const keywordFreq = JSON.parse('{{ keyword_freq|tojson }}');
+
+// Sort the keyword frequency in descending order and get the top 15
+let topKeywordss = Object.entries(keywordFreq).sort(([, a], [, b]) => b - a).slice(0, 15).map(([key, value]) => ({ key, value }));
+
+const hashTag = document.querySelector(".hashtag");
+
+// Populate the hashtag div with top keywords
+topKeywordss.forEach((keyword, index) => {
+    const kw = document.createElement("div");
+    kw.classList.add("kw");
+
+    const span = document.createElement("span");
+    
+    span.classList.add("keyword");
+    span.textContent = `#${keyword.key}`;
+  
+    kw.appendChild(span);
+
+    const span1 = document.createElement("span");
+    span1.classList.add("divider");
+    span1.textContent = "|";
+    
+    kw.appendChild(span1);
+
+    const span2 = document.createElement("span");
+    span2.classList.add("count");
+    span2.textContent = keyword.value;
+    
+    kw.appendChild(span2);
+
+    hashTag.appendChild(kw);
+
+});
+
+
+// Get the table element by ID
+//const topxTable = document.getElementById("topx");
+
+// Populate the table with top keywords
+//topKeywordss.forEach((keyword, index) => {
+//  const row = topxTable.insertRow(index);
+//  row.insertCell(0).textContent = keyword.key;
+//  row.insertCell(1).textContent = keyword.value;
+//});
+
+</script>
+
+
+{% endblock %}
+
+{% endblock %}

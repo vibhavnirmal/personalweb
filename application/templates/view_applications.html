@@ -1,0 +1,185 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="{{ url_for('static', filename='css/counters.css') }}" rel="stylesheet">
+
+
+<div class="container-fluid mt-4">
+    <h4 class="text-center">Applications I am tracking</h4>
+    <hr>
+    <div class="row">
+        <div class="col-md-3 mb-3">
+            <div class="panel">
+                <button class="btn cnts" type="button" id="totApps">
+                    <span id="wrt">Total Applications</span>
+                    <span class="totalapps" id="counterr">0</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="panel">
+                <button class="btn cnts" type="button" id="notSel">
+                    <span id="wrt">Not selected</span>
+                    <span class="totalNS" id="counterr">0</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="panel">
+                <button class="btn cnts" type="button" id="ints">
+                    <span id="wrt">Got Interviews from</span>
+                    <span class="gotIntFrom" id="counterr">0</span>
+                </button>
+            </div>
+        </div>   
+        <div class="col-md-3 mb-3">
+            <div class="panel">
+                <button class="btn cnts" type="button" id="applied">
+                    <div id="wrt">Waiting for response</div>
+                    <div class="WaitingForResp" id="counterr">0</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table id="example" class="table table-striped align-middle" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Company name</th>
+                    <th>Applied on</th>
+                    <th>Job Link</th>
+                    <th>Position</th>
+                    <th>Found at</th>
+                    <th>Current Status</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for file in files %}
+                {% if file.deleted == false %}
+                <tr>
+                    <td>{{ file.company.company_name }}</td>
+                    <td id="date">{{ file.date_added }}</td>
+
+                    <td>
+                        {% if file.link %}
+                            <a href="{{ file.link }}" target="_blank">
+                                <button class="brn btn-primary btn-sm" type="button" id="jobLink">
+                                    <i class="bi-link-45deg"></i>
+                                </button>
+                            </a>
+                        {% else %}
+                            <span>NA</span>
+                        {% endif %}
+                    </td>
+
+                    <td>{{ file.position }}</td>
+                    <td>{{ file.from_portal }}</td>
+                    <td>{{ file.status }}</td>
+
+                    <td>
+                        <a href="{{ url_for('my_applications.edit_application', id=file.id) }}">
+                            <button class="btn btn-primary btn-sm" type="button" id="editApplication">
+                                <i class="bi-pencil-square"></i>
+                            </button>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('my_applications.delete_application', id=file.id) }}">
+                            <button class="btn btn-danger btn-sm" type="button" id="deleteApplication">
+                                <i class="bi-trash"></i>
+                            </button>
+                        </a>
+                    </td>
+
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+<!-- DataTables -->
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    //once everything is loaded on the page, run this function to search {{ name }} in the datatable
+    $(document).ready(function () {
+        var table = $('#example').DataTable();
+        
+
+        '{% if name %}'
+        table.search("{{ name }}").draw();
+        '{% endif %}'
+        
+        var countApplied = 0;
+        table.rows().every(function () {
+            if (this.data()[5] == "Applied") {
+                countApplied++;
+            }
+        });
+        $('.WaitingForResp').eq(0).text(countApplied);
+        
+        var countNotSelected = 0;
+        table.rows().every(function () {
+            if (this.data()[5] == "Not Selected") {
+                countNotSelected++;
+            }
+        });
+        $('.totalNS').eq(0).text(countNotSelected);
+
+        var countGotInterview = 0;
+        table.rows().every(function () {
+            if (this.data()[5] == "Interviewed") {
+                countGotInterview++;
+            }
+        });
+        $('.gotIntFrom').eq(0).text(countGotInterview);
+
+        var countTotal = 0;
+        table.rows().every(function () {
+            countTotal++;
+        });
+        $('.totalapps').eq(0).text(countTotal);
+
+        // '{% for file in files %}'
+        // var date = new Date('{{ file.date }}');
+        // date = date.toLocaleDateString();
+        // console.log(date);
+        // '{% endfor %}'
+
+
+        // if button is clicked, change text to draw table
+        $('#applied').click(function () {
+            table.search("Applied").draw();
+        });
+
+        $('#notSel').click(function () {
+            table.search("Not Selected").draw();
+        });
+
+        $('#ints').click(function () {
+            table.search("Interviewed").draw();
+        });
+
+        $('#totApps').click(function () {
+            table.search("").draw();
+        });
+    });
+
+
+</script>
+
+{% endblock %}
