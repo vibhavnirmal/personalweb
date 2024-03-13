@@ -7,7 +7,6 @@
         <table id="example" class="table table-striped align-middle" style="width:100%">
             <thead>
                 <tr>
-                    <th>id</th>
                     <th>Company name</th>
                     <th>Career Link</th>
                     <th>Applications</th>
@@ -21,23 +20,38 @@
                 {% for file in files %}
                 {% if file.deleted == false %}
                 <tr>
-                    <td>{{ file.id }}</td>
-                    <td><a href="{{ file.url }}" target="_blank">{{ file.company_name }}</a></td>
                     <td>
-                        <a href="{{ file.career_page_url }}" target="_blank">{{ '<i
-                                class="bi-box-arrow-up-right"></i>'|safe }}</a>
+                        {% if file.website %}
+                            <a href="{{ file.website | default('#', true) }}" target="_blank">{{ file.company_name }}</a>
+                        {% else %}
+                            {{ file.company_name }}
+                        {% endif %}
+                    </td>
+                        
+                    <td>
+                        {% if file.careers_page %}
+                            <a href="{{ file.careers_page }}" target="_blank">
+                                {{ '<i class="bi-box-arrow-up-right"></i>'|safe }}
+                            </a>
+                        {% else %}
+                        {{ '<i class="bi-box-arrow-up-right"></i>'|safe }}
+                        {% endif %}
                     </td>
 
                     <td>
-                        {{ applications[file.company_name]|default(0, true) }} 
-                        <a href="{{ url_for('my_applications.view_applications', company_name=file.company_name) }}" target="_blank">
-                            <button class="btn btn-secondary btn-sm" type="button" id="viewApplications"> 
-                                {{ '<i class="bi-eye"></i>'|safe }}
-                            </button>
-                        </a>
+                        {% if applications.get(file.company_name, 0) > 0 %}
+                            {{ applications.get(file.company_name) }}
+                            <a href="{{ url_for('my_applications.view_applications', company_name=file.company_name) }}">
+                                <button class="btn btn-secondary btn-sm" type="button" id="viewApplications">
+                                    {{ '<i class="bi-eye"></i>'|safe }}
+                                </button>
+                            </a>
+                        {% else %}
+                            0
+                        {% endif %}
                     </td>
 
-                    <td>{{ file.location.city|default('Not available', true) }}</td>
+                    <td id="city">{{ file.location|default('Not available', true) }}</td>
 
                     <td>
                         <a href="{{ url_for('my_companies.edit_company', id=file.id) }}">
@@ -63,19 +77,6 @@
 
 </div>
 
-<!-- not working -->
-
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-
-<script>
-    //once everything is loaded on the page, if delete button is clicked, show a confirmation dialog
-    $(document).ready(function () {
-        $('#deleteCompany').click(function () {
-            alert("Do you want to delete this company?");
-            
-        });
-    });
-</script>
 
 {% endblock %}

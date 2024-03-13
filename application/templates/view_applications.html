@@ -115,13 +115,11 @@
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
 <script>
-    //once everything is loaded on the page, run this function to search {{ name }} in the datatable
     $(document).ready(function () {
         var table = $('#example').DataTable();
         
-
-        '{% if name %}'
-        table.search("{{ name }}").draw();
+        '{% if company_name %}'
+        table.search("{{ company_name }}").draw();
         '{% endif %}'
         
         var countApplied = 0;

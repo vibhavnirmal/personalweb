@@ -29,6 +29,13 @@ def countAppsPerCompany():
 @my_companies.route('/view_companies', methods=['GET'])
 def view_companies():
     all_data = Company.query.all()
+
+    for company in all_data:
+        company.date_added = company.date_added.strftime("%m/%d/%Y")
+        company.date_updated = company.date_updated.strftime("%m/%d/%Y")
+        if company.location is not None:
+            company.location = json.loads(company.location).get('city')
+
     all_applications = countAppsPerCompany() 
 
     form = CompanyForm()
@@ -50,6 +57,13 @@ def add_company():
                 about = form.description.data,
                 types = form.types.data,
                 industry = "",
+
+                location = json.dumps({
+                    "city": form.city.data,
+                    "state": form.state.data,
+                    "country": form.country.data
+                    }),
+
                 date_added = datetime.now().strftime('%Y-%m-%d'),
                 date_updated = datetime.now().strftime('%Y-%m-%d'),
                 deleted = False

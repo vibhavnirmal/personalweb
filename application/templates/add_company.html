@@ -14,39 +14,83 @@
 
         <!-- for each StringField -->
         {% for field in form %}
-            {% if field.type == "StringField" %}
+            {% if field.name not in ['country', 'state', 'city', 'submit'] %}
+                {% if field.type == "StringField" %}
+                    <div class="form-group">
+                        {% if field.errors %}
+                            {{ field(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in field.errors %}
+                                <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ field(class="form-control form-control-lg mt-2") }}
+                        {% endif %}
+                    </div>
+                {% elif field.type== "TextAreaField" %}
+                    <div class="form-group">
+                        <!-- {{ field.label(class="form-control-label mt-1") }} -->
+                        {% if field.errors %}
+                            {{ field(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in field.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ field(class="form-control form-control-lg mt-2") }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        <div class="row">
+            <div class="col-md-4">
                 <div class="form-group">
-                    {% if field.errors %}
-                        {{ field(class="form-control form-control-lg is-invalid") }}
+                    {% if form.country.errors %}
+                        {{ form.country(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in field.errors %}
+                            {% for error in form.country.errors %}
                             <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ field(class="form-control form-control-lg mt-2") }}
+                        {{ form.country(class="form-control form-control-lg mt-2") }}
                     {% endif %}
                 </div>
-            {% elif field.type== "TextAreaField" %}
+            </div>
+            <div class="col-md-4">
                 <div class="form-group">
-                    <!-- {{ field.label(class="form-control-label mt-1") }} -->
-                    {% if field.errors %}
-                        {{ field(class="form-control form-control-lg is-invalid") }}
+                    {% if form.state.errors %}
+                        {{ form.state(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
-                            {% for error in field.errors %}
-                                <span>{{ error }}</span>
+                            {% for error in form.state.errors %}
+                            <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ field(class="form-control form-control-lg mt-2") }}
+                        {{ form.state(class="form-control form-control-lg mt-2") }}
                     {% endif %}
                 </div>
-            {% elif field.type == "SubmitField" %}
-                <button type="submit" class="btn btn-outline-info btn-lg mt-2">{{ form.submit.label }}</button>
-            {% endif %}
-
-
-        {% endfor %}
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    {% if form.city.errors %}
+                        {{ form.city(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.city.errors %}
+                            <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.city(class="form-control form-control-lg mt-2") }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-outline-info btn-lg mt-2">{{ form.submit.label }}</button>
 
         {% block javascript %}
 

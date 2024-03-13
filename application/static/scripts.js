@@ -136,13 +136,20 @@ function initialize() {
     var countries = jsonCountryStateCity.map(function (country) { return country.name; });
     autocomplete(document.getElementById("country"), countries);
 
-    // Event listeners for focusout
-    document.getElementById("country").addEventListener("focusout", handleCountryFocusOut);
-    document.getElementById("state").addEventListener("focusout", handleStateFocusOut);
+    try {
+        // Event listeners for focusout
+        document.getElementById("country").addEventListener("focusout", handleCountryFocusOut);
+        document.getElementById("state").addEventListener("focusout", handleStateFocusOut);
 
-    // Event listener for country change
-    document.getElementById("country").addEventListener("change", handleCountryChange);
-    document.getElementById("state").addEventListener("change", handleStateChange);
+        // Event listener for country change
+        document.getElementById("country").addEventListener("change", handleCountryChange);
+        document.getElementById("state").addEventListener("change", handleStateChange);
+
+    }
+    catch (err) {
+        console.log(err.message);
+    }
+        
 }
 
 function handleCountryFocusOut() {

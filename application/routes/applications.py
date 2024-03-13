@@ -14,14 +14,17 @@ from datetime import datetime
 
 my_applications = Blueprint('my_applications', __name__, url_prefix='/applications')
 
-@my_applications.route('/view_applications', methods=['GET'])
-def view_applications():
+@my_applications.route('/view_applications', methods=['POST', 'GET'])
+def view_applications(company_name=None):
+    company_name = request.args.get('company_name')
+
     all_data = Application.query.options(joinedload(Application.company)).all()
 
     for application in all_data:
         application.date_added = application.date_added.strftime("%m/%d/%Y")
 
-    return render_template('view_applications.html', title='View Applications', files=all_data)
+    return render_template('view_applications.html', title='View Applications', files=all_data, company_name=company_name)
+
 
 @my_applications.route('/add_application', methods=['POST', 'GET'])
 def add_application():
