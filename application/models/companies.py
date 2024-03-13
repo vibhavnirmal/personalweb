@@ -8,9 +8,10 @@ class Company(db.Model):
     website = db.Column(db.String, nullable=False)
     careers_page = db.Column(db.String)
 
-    location_id = db.Column(db.Integer, db.ForeignKey('locations.id'), nullable=False)
+    # location_id = db.Column(db.Integer, db.ForeignKey('locations.id'), nullable=False)
+    # location = db.relationship('Location', backref='companies')
 
-    location = db.relationship('Location', backref='companies')
+    location = db.Column(db.Text, nullable=False)
     
     about = db.Column(db.Text, nullable=False)
     types = db.Column(db.String, nullable=False)

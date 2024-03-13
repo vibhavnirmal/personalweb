@@ -5,7 +5,7 @@ new DataTable('#example');
 function autocomplete(inp, arr) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
-    
+
     var currentFocus;
 
     if (!inp) return;
@@ -106,24 +106,78 @@ function autocomplete(inp, arr) {
     document.addEventListener("click", function (e) {
         closeAllLists(e.target);
     });
-} 
+}
 
 // read json file ajax
 var jsonCountryStateCity = null;
 
+// Load JSON data asynchronously
 $.ajax({
     url: "/static/countryStateCity.json",
     dataType: 'json',
-    async: false,
     success: function (data) {
         jsonCountryStateCity = data;
+        initialize();
+    },
+    error: function () {
+        console.log("Error loading JSON file");
     }
 });
 
-if (jsonCountryStateCity == null) {
-    console.log("Error loading json file");
-}else{
-    console.log("json file loaded");
+function initialize() {
+    if (jsonCountryStateCity === null) {
+        console.log("Error loading JSON file");
+        return;
+    }
+
+    console.log("JSON file loaded");
+
+    // Extract countries
     var countries = jsonCountryStateCity.map(function (country) { return country.name; });
     autocomplete(document.getElementById("country"), countries);
+
+    // Event listeners for focusout
+    document.getElementById("country").addEventListener("focusout", handleCountryFocusOut);
+    document.getElementById("state").addEventListener("focusout", handleStateFocusOut);
+
+    // Event listener for country change
+    document.getElementById("country").addEventListener("change", handleCountryChange);
+    document.getElementById("state").addEventListener("change", handleStateChange);
+}
+
+function handleCountryFocusOut() {
+    let country = document.getElementById("country").value;
+    let statesOfCountry = getStatesOfCountry(country);
+    autocomplete(document.getElementById("state"), statesOfCountry);
+}
+
+function handleStateFocusOut() {
+    let state = document.getElementById("state").value;
+    let country = document.getElementById("country").value;
+    let citiesOfState = getCitiesOfState(state, country);
+    autocomplete(document.getElementById("city"), citiesOfState);
+}
+
+function getStatesOfCountry(country) {
+    let selectedCountry = jsonCountryStateCity.find(c => c.name === country);
+    return selectedCountry ? selectedCountry.states.map(s => s.name) : [];
+}
+
+function getCitiesOfState(state, country) {
+    let selectedCountry = jsonCountryStateCity.find(c => c.name === country);
+    if (selectedCountry) {
+        let selectedState = selectedCountry.states.find(s => s.name === state);
+        return selectedState ? selectedState.cities.map(c => c.name) : [];
+    }
+    return [];
+}
+
+// if country changed, clear state and city
+function handleCountryChange() {
+    document.getElementById("state").value = "";
+    document.getElementById("city").value = "";
+}
+
+function handleStateChange() {
+    document.getElementById("city").value = "";
 }

@@ -49,7 +49,6 @@ def add_application():
     companies = json.dumps(get_all_company_names())  # Combine company retrieval and JSON conversion
     return render_template('add_application.html', title='Add Application', form=form, companies=companies)
 
-
 @my_applications.route('/edit_application', methods=['POST','GET'])
 def edit_application():
     if request.method == 'POST':

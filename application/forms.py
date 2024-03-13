@@ -10,9 +10,11 @@ class CompanyForm(FlaskForm):
     career_page_url = StringField("Career Page URL", render_kw={"placeholder": "Career Page URL"})
     description = TextAreaField("Description", render_kw={"placeholder": "Description"})
     types = StringField("Types",  render_kw={"placeholder": "Types"})
-    city = StringField("City",  render_kw={"placeholder": "City"})
-    state = StringField("State",  render_kw={"placeholder": "State"})
+    
     country = StringField("Country", render_kw={"placeholder": "Country"})
+    state = StringField("State",  render_kw={"placeholder": "State"})
+    city = StringField("City",  render_kw={"placeholder": "City"})
+    
     submit = SubmitField("Add Company")
 
 
@@ -22,9 +24,11 @@ class FoodForm(FlaskForm):
     price = FloatField("Price", validators=[DataRequired()], render_kw={"placeholder": "Price"})
     brand = StringField("Brand", render_kw={"placeholder": "Brand"})
     category = StringField("Category", render_kw={"placeholder": "Category"})
-    city = StringField("City", validators=[DataRequired()], render_kw={"placeholder": "City"})
-    state = StringField("State", validators=[DataRequired()], render_kw={"placeholder": "State"})
+    
     country = StringField("Country", validators=[DataRequired()], render_kw={"placeholder": "Country"})
+    state = StringField("State", validators=[DataRequired()], render_kw={"placeholder": "State"})
+    city = StringField("City", validators=[DataRequired()], render_kw={"placeholder": "City"})
+    
     image = FileField("Image File", 
                       name="file-to-upload",
                       render_kw={"placeholder": "Image File", "accept": "image/*"})

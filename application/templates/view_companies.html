@@ -40,14 +40,14 @@
                     <td>{{ file.location.city|default('Not available', true) }}</td>
 
                     <td>
-                        <a href="#">
+                        <a href="{{ url_for('my_companies.edit_company', id=file.id) }}">
                             <button class="btn btn-primary btn-sm" type="button" id="editCompany">
                                 {{ '<i class="bi-pencil-square"></i>'|safe }}
                             </button>
                         </a>    
                     </td>
                     <td>
-                        <a href="#">
+                        <a href="{{ url_for('my_companies.delete_company', id=file.id) }}">
                             <button class="btn btn-danger btn-sm" type="button" id="deleteCompany">
                                 {{ '<i class="bi-trash"></i>'|safe }}
                             </button>
