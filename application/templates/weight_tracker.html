@@ -33,9 +33,9 @@
         </form>
     </div>
     <div class="col-md-9">
-
         {% for data in weight_data %}
-        <span>Weight: {{ data.weight|safe + " Lbs" }} | Date: {{ data.date }}</span>
+        <span>Weight: {{ data.weight|safe + " Lbs" }} | Date: {{ data.date_added }}</span>
+        <br>
         {% endfor %}
     </div>
 </div>

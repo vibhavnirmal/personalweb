@@ -1,4 +1,3 @@
-
 from ..extensions import db
 
 class Location(db.Model):
