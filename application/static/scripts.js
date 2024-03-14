@@ -149,7 +149,6 @@ function initialize() {
     catch (err) {
         console.log(err.message);
     }
-        
 }
 
 function handleCountryFocusOut() {

@@ -19,9 +19,6 @@ class Application(db.Model):
     from_portal = db.Column(db.String)
     salary_low = db.Column(db.Integer)
     salary_high = db.Column(db.Integer)
-    location_id = db.Column(db.Integer, db.ForeignKey('locations.id'))
-    
-    location = db.relationship('Location', backref='applications')
     
     description = db.Column(db.String(255))
     personal_notes = db.Column(db.String(255))
