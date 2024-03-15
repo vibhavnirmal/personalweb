@@ -88,7 +88,10 @@ def edit_application():
             application = Application.query.filter_by(id=application_id).first()
 
             application.position = form.position.data.replace("/", "-")
-            application.date_added = datetime.strptime(str(form.date.data), '%Y-%m-%d')
+            
+            application.date_added = datetime.strptime(str(form.date.data), '%Y-%m-%d').date()
+            application.date_updated = datetime.now().date()
+
             application.link = form.link.data
             application.email_used = form.email_given.data
             application.status = form.status.data

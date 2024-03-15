@@ -12,11 +12,9 @@ from sqlalchemy import or_
 
 from datetime import datetime
 
-from application.models import locations
-
 my_companies = Blueprint('my_companies', __name__, url_prefix='/companies')
 
-def countAppsPerCompany():
+def count_apps_per_company():
     all_data = Application.query.options(joinedload(Application.company)).all()
     all_applications = {}
     for application in all_data:
@@ -36,7 +34,7 @@ def view_companies():
         if company.location is not None:
             company.location = json.loads(company.location).get('city')
 
-    all_applications = countAppsPerCompany() 
+    all_applications = count_apps_per_company() 
 
     form = CompanyForm()
 
@@ -64,8 +62,8 @@ def add_company():
                     "country": form.country.data
                     }),
 
-                date_added = datetime.now().strftime('%Y-%m-%d'),
-                date_updated = datetime.now().strftime('%Y-%m-%d'),
+                date_added = datetime.now().date(),
+                date_updated = datetime.now().date(),
                 deleted = False
             )
 
@@ -77,7 +75,7 @@ def add_company():
 
                 return redirect(url_for('my_companies.view_companies'))
 
-    typesT = getTypesOfCompanies()
+    typesT = get_types_of_companies()
     listofstates = []
     listofcities = []
 
@@ -104,7 +102,7 @@ def edit_company():
                 "country": form.country.data
             })
 
-            company.date_updated = datetime.now().strftime('%Y-%m-%d')
+            company.date_updated = datetime.now().date()
             company.deleted = False
 
             db.session.commit()
@@ -123,34 +121,30 @@ def edit_company():
         form.description.data = company.about
         form.types.data = company.types
 
-        locations = company.location
-        if locations is not None and 'city' in locations:
-            form.city.data = locations['city']
-            form.state.data = locations['state']
-            form.country.data = locations['country']
-        else:
-            form.city.data = "NA"
-            form.state.data = "NA"
-            form.country.data = "NA"
+        locations = json.loads(company.location) if company.location else {}
+
+        form.city.data = locations.get('city', 'NA')
+        form.state.data = locations.get('state', 'NA')
+        form.country.data = locations.get('country', 'NA')
         
-    typesT = getTypesOfCompanies()
+    typesT = get_types_of_companies()
 
     return render_template('edit_company.html', title='Edit Company', form=form, types=typesT, locs = locations)
 
 @my_companies.route('/delete_company', methods=['POST','GET'])
 def delete_company():
-    if request.method == 'POST':
-        form = CompanyForm(request.form)
-        if form.validate_on_submit():
-            pass
-        return redirect(url_for('view_companies'))
-    else:
-        form = CompanyForm()
-    
-    return render_template('delete_company.html', title='Delete Company', form=form)
+    company_id = request.args.get('id')
 
+    company = Company.query.filter_by(id=company_id).first()
 
-def getTypesOfCompanies():
+    company.deleted = True
+    company.date_updated = datetime.now().date()
+
+    db.session.commit()
+
+    return redirect(url_for('my_companies.view_companies'))
+
+def get_types_of_companies():
     companyTypes = set()
     for company in Company.query.all():
         companyTypes.add(company.types)
