@@ -5,9 +5,22 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="{{ url_for('static', filename='css/counters.css') }}" rel="stylesheet">
 
-
 <div class="container-fluid mt-4">
-    <h4 class="text-center">Applications I am tracking</h4>
+
+    <div class="container">
+        <div class="row justify-content-between mb-4">
+            <div>
+                <a href="{{ url_for('my_applications.add_application') }}" class="btn btn-success float-left">
+                    <i class="bi bi-plus-circle"></i>
+                    &nbsp;Add Application
+                </a>
+            </div>
+            <div class="text-center">
+                <h4>Tracked Applications</h4>
+            </div>
+        </div>
+    </div>
+    
     <hr>
     <div class="row">
         <div class="col-md-3 mb-3">

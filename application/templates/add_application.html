@@ -1,20 +1,36 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<form method="POST" action="" class="mt-4">
-    <!-- {{ form.csrf_token() }} -->
-    <fieldset class="form-group">
-        <legend class="mt-4 mb-4 text-center">Applied Here</legend>
-        {% for field in form %}
+
+<div class="container-fluid mt-4">
+
+    <div class="container">
+        <div class="row justify-content-between mb-4">
+            <div>
+                <a href="{{ url_for('my_applications.view_applications') }}" class="btn btn-success float-left">
+                    <i class="bi bi-arrow-left-circle"></i>
+                    &nbsp;View Applications
+                </a>
+            </div>
+            <div class="text-center">
+                <h4>Add new application</h4>
+            </div>
+        </div>
+    </div>
+
+    <form method="POST" action="" class="mt-4">
+        <!-- {{ form.csrf_token() }} -->
+        <fieldset class="form-group">
+            {% for field in form %}
             {% if field.name == 'submit' %}
-                <button type="submit" class="btn btn-outline-info btn-lg mt-2">{{ form.submit.label }}</button>
+            <button type="submit" class="btn btn-outline-info btn-lg mt-2">{{ form.submit.label }}</button>
             {% else %}
             <div class="form-group row">
                 <div class="col-md-3">
                     {% if field.name == 'date' %}
-                        <label for="date" class="form-control-label mt-3">Date Applied</label>
+                    <label for="date" class="form-control-label mt-3">Date Applied</label>
                     {% elif field.name != 'csrf_token' %}
-                        {{ field.label(class="form-control-label mt-3") }}
+                    {{ field.label(class="form-control-label mt-3") }}
                     {% endif %}
                 </div>
                 <div class="col-md-9">
@@ -26,36 +42,38 @@
                         {% endfor %}
                     </ul>
                     {% endif %}
-                </div>  
+                </div>
             </div>
             {% endif %}
-        {% endfor %}
+            {% endfor %}
 
-        {% block javascript %}
+            {% block javascript %}
 
-        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-        <script>
-            $(document).ready(function(){
+            <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+            <script>
+                $(document).ready(function () {
 
-                // Setting Default date to today
-                var today = new Date();
-                today.setHours(today.getHours() - 6);
-                $('#date').val(today.toISOString().slice(0,10));
+                    // Setting Default date to today
+                    var today = new Date();
+                    today.setHours(today.getHours() - 6);
+                    $('#date').val(today.toISOString().slice(0, 10));
 
-                var listofcompanies = '{{ companies }}';
+                    var listofcompanies = '{{ companies }}';
 
-                // remove &#34; from all companies
-                listofcompanies = listofcompanies.replace(/&#34;/g, '"');
-                listofcompanies = JSON.parse(listofcompanies);
-                console.log(listofcompanies);
+                    // remove &#34; from all companies
+                    listofcompanies = listofcompanies.replace(/&#34;/g, '"');
+                    listofcompanies = JSON.parse(listofcompanies);
+                    console.log(listofcompanies);
 
-                document.getElementById("company").autocomplete = 'off';
-                autocomplete(document.getElementById("company"), listofcompanies);
-            });           
-        </script>
-        {% endblock %}
+                    document.getElementById("company").autocomplete = 'off';
+                    autocomplete(document.getElementById("company"), listofcompanies);
+                });           
+            </script>
+            {% endblock %}
 
-    </fieldset>
-</form>
+        </fieldset>
+    </form>
+
+</div>
 
 {% endblock %}
