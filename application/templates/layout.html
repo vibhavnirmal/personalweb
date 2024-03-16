@@ -49,55 +49,23 @@
     <main class="container-fluid">
         <div class="row">
             <div class="col-md-2">
-                <div class="accordion" id="accordionExample">
-                    <script>
-                        const accordionItems = [
-                            { 
-                                id: 'companies', title: 'Companies', urls: [
-                                    { text: 'Add New Company', url: "{{ url_for('my_companies.add_company') }}" },
-                                    { text: 'View Companies', url: "{{ url_for('my_companies.view_companies') }}" }
-                                ]
-                            },
-                            { 
-                                id: 'applications', title: 'Applications', urls: [
-                                    { text: 'Add New Application', url: "{{ url_for('my_applications.add_application') }}" },
-                                    { text: 'View Applications', url: "{{ url_for('my_applications.view_applications') }}" }
-                                ]
-                            },
-                            {   
-                                id: 'foodreviews', title: 'Food Reviews', urls: [
-                                    { text: 'Add New Food Review', url: "{{ url_for('food_track.add_new_food') }}" },
-                                    { text: 'View Food Reviews', url: "{{ url_for('food_track.view_food') }}" }
-                                ]
-                            },
-                            {   
-                                id: 'trackweight', title: 'Track Weight', urls: [
-                                    { text: 'Weight Tracker', url: "{{ url_for('my_weight_tracking.log_weight') }}" }
-                                ]
-                            }
-                        ];
-            
-                        accordionItems.forEach(item => {
-                            document.write(`
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="${item.id}">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapse-${item.id}" aria-expanded="false" aria-controls="collapse-${item.id}">
-                                            ${item.title}
-                                        </button>
-                                    </h2>
-                                    <div id="collapse-${item.id}" class="accordion-collapse collapse" aria-labelledby="${item.id}"
-                                        data-bs-parent="#accordionExample">
-                                        <div class="accordion-body">
-                                            <ul class="nav flex-column ms-1" data-bs-parent="#menu">
-                                                ${item.urls.map(url => `<li><a href="${url.url}" class="nav-link">${url.text}</a></li>`).join('')}
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            `);
-                        });
-                    </script>
+                <div class="list-group">
+                    <a href="{{ url_for('my_companies.view_companies') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-building navIcons"></i>
+                        Companies
+                    </a>
+                    <a href="{{ url_for('my_applications.view_applications') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-ui-checks navIcons"></i>
+                        Applications
+                    </a>    
+                    <a href="{{ url_for('my_weight_tracking.log_weight') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-activity navIcons"></i>
+                        Weight Tracking
+                    </a>
+                    <a href="{{ url_for('food_track.view_food') }}" class="list-group-item list-group-item-action">
+                        <i class="bi bi-cup-fill navIcons"></i>
+                        Food Tracking
+                    </a> 
                 </div>
             </div>
             

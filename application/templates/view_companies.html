@@ -1,8 +1,24 @@
 {% extends "layout.html" %}
 
 {% block content %}
+
 <div class="container-fluid mt-4">
-    <h4 class="text-center">Companies I am tracking</h4>
+
+    <div class="container">
+        <div class="row justify-content-between mb-4">
+            <div>
+                <a href="{{ url_for('my_companies.add_company') }}" class="btn btn-success float-left">
+                    <i class="bi bi-plus-circle"></i>
+                    &nbsp;Add Company
+                </a>
+            </div>
+            <div class="text-center">
+                <h4>Tracked Companies</h4>
+            </div>
+        </div>
+    </div>
+    
+
     <div class="table-responsive">
         <table id="example" class="table table-striped align-middle" style="width:100%">
             <thead>
