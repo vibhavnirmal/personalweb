@@ -50,76 +50,57 @@
         <div class="row">
             <div class="col-md-2">
                 <div class="accordion" id="accordionExample">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="companies">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                Companies
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="companies"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <ul class="nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
-                                    <li><a href="{{ url_for('my_companies.add_company') }}" class="nav-link">Add New Company</a></li>
-                                    <li><a href="{{ url_for('my_companies.view_companies') }}" class="nav-link">View Companies</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="applications">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Applications
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="applications"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <ul class="nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                                    <li><a href="{{ url_for('my_applications.add_application') }}" class="nav-link">Add New Application</a></li>
-                                    <li><a href="{{ url_for('my_applications.view_applications') }}" class="nav-link">View Applications</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="foodreviews">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                Food Reviews
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="foodreviews"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <ul class="nav flex-column ms-1" id="submenu4" data-bs-parent="#menu">
-                                    <li><a href="{{ url_for('food_track.add_new_food') }}" class="nav-link"> Add New Food Review</a></li>
-                                    <li><a href="{{ url_for('food_track.view_food') }}" class="nav-link"> View Food Reviews</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="trackweight">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                Track Weight
-                            </button>
-                        </h2>
-                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="trackweight"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <ul class="nav flex-column ms-1" id="submenu5" data-bs-parent="#menu">
-                                    <li><a href="{{ url_for('my_weight_tracking.log_weight') }}" class="nav-link">Weight Tracker</a></li>
-                                </ul>
-                            </div>
-                        </div>  
-                    </div>
-
+                    <script>
+                        const accordionItems = [
+                            { 
+                                id: 'companies', title: 'Companies', urls: [
+                                    { text: 'Add New Company', url: "{{ url_for('my_companies.add_company') }}" },
+                                    { text: 'View Companies', url: "{{ url_for('my_companies.view_companies') }}" }
+                                ]
+                            },
+                            { 
+                                id: 'applications', title: 'Applications', urls: [
+                                    { text: 'Add New Application', url: "{{ url_for('my_applications.add_application') }}" },
+                                    { text: 'View Applications', url: "{{ url_for('my_applications.view_applications') }}" }
+                                ]
+                            },
+                            {   
+                                id: 'foodreviews', title: 'Food Reviews', urls: [
+                                    { text: 'Add New Food Review', url: "{{ url_for('food_track.add_new_food') }}" },
+                                    { text: 'View Food Reviews', url: "{{ url_for('food_track.view_food') }}" }
+                                ]
+                            },
+                            {   
+                                id: 'trackweight', title: 'Track Weight', urls: [
+                                    { text: 'Weight Tracker', url: "{{ url_for('my_weight_tracking.log_weight') }}" }
+                                ]
+                            }
+                        ];
+            
+                        accordionItems.forEach(item => {
+                            document.write(`
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="${item.id}">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapse-${item.id}" aria-expanded="false" aria-controls="collapse-${item.id}">
+                                            ${item.title}
+                                        </button>
+                                    </h2>
+                                    <div id="collapse-${item.id}" class="accordion-collapse collapse" aria-labelledby="${item.id}"
+                                        data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            <ul class="nav flex-column ms-1" data-bs-parent="#menu">
+                                                ${item.urls.map(url => `<li><a href="${url.url}" class="nav-link">${url.text}</a></li>`).join('')}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                        });
+                    </script>
                 </div>
             </div>
+            
 
             <div class="col-md-8">
                 {% block content %}
