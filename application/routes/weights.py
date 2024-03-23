@@ -32,4 +32,4 @@ def log_weight():
         # sort by date_added 
         all_data = sorted(all_data, key=lambda x: x.date_added)
 
-    return render_template('weight_tracker.html', title='Log Weight', form=form, weight_data=all_data)
+    return render_template('weight/weight_tracker.html', title='Log Weight', form=form, weight_data=all_data)

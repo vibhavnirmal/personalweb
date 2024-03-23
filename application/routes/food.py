@@ -15,9 +15,9 @@ def add_new_food():
     else:
         form = FoodForm()
     
-    return render_template('add_food_review.html', title='Add Food Review', form=form)
+    return render_template('foodreview/add_food_review.html', title='Add Food Review', form=form)
 
 @food_track.route('/view_food', methods=['GET'])
 def view_food():
     all_data = []
-    return render_template('view_food.html', title='View Food', files=all_data)
+    return render_template('foodreview/view_food.html', title='View Food', files=all_data)

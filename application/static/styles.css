@@ -99,3 +99,200 @@
 .divider {
     margin-left: 3px;
 }
+
+
+/* General styles */
+.company-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Logo styles */
+.company-logo {
+    max-width: 150px; /* Adjust as needed */
+    height: auto;
+}
+
+/* Company details styles */
+.company-details {
+    margin-top: 20px;
+}
+
+.company-name {
+    font-size: 24px;
+    margin: 0;
+}
+
+.company-location-industry {
+    font-size: 14px;
+    margin: 5px 0 0;
+    color: #888;
+}
+
+/* Links styles */
+.company-links {
+    display: flex;
+    gap: 10px;
+    margin: 20px;
+    
+}
+
+.company-links button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.company-links button.disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* on hover dont do anything */
+.company-links button.disabled:hover {
+    cursor: default !important;
+    pointer-events: none !important;
+}
+.company-edit-delete a {
+    min-width: 40px;
+    display: inline-block;
+    text-decoration: none;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+.company-edit-delete a i {
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+
+/* Company description styles */
+.company-description {
+    margin-top: 20px;
+}
+
+.company-description p {
+    margin: 0;
+    font-size: 16px;
+}
+
+/*  */
+
+/* Styling for application items */
+.application-item {
+    position: relative; /* Required for absolute positioning */
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: box-shadow 0.3s ease; /* Adding transition for smoother hover effect */
+}
+
+.application-item:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for application details */
+.application-details {
+    padding: 15px;
+}
+
+.application-details p {
+    margin-bottom: 5px;
+}
+
+.application-details small {
+    color: #6c757d;
+}
+
+/* Styling for position title */
+.application-item h5 {
+    margin-bottom: 0;
+    font-size: 18px; /* Increase font size for better emphasis */
+}
+
+/* Styling for date */
+.application-item small {
+    font-size: 12px; /* Reduce font size for date to make it less prominent */
+}
+
+/* Styling for edit and delete icons */
+.btn-s {
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    margin-left: 10px;
+}
+
+
+.edit-delete-icons {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.edit-delete-icons a {
+    text-decoration: none;
+    margin-right: 10px; /* Add spacing between edit and delete icons */
+    transition: color 0.3s ease; /* Adding transition for smoother color change */
+}
+
+.edit-delete-icons a:hover {
+    color: #dc3545; /* Change color on hover for better visibility */
+}
+
+
+/*  */
+
+
+/* job details */
+.job-detail {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.details-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+.detail {
+    flex: 1 0 33.33%; /* Adjust width as needed */
+    margin-right: 10px; /* Adjust spacing between detail items */
+}
+
+#date-applied-list{
+    font-size: 12px;
+    float: right;
+    color: #6c757d;
+}

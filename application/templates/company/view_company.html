@@ -1,0 +1,177 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+    <div class="company-info">
+        {% if company.logo %}
+        <img src="{{ url_for('static', filename='images/logos/' + company.logo) }}" alt="Company Logo"
+            class="company-logo" title="{{ company.company_name }}">
+        {% endif %}
+
+        <div class="company-details">
+            <h1 class="company-name">{{ company.company_name }}</h1>
+            <p class="company-location-industry">
+                <span class="company-location">{{ loc }}</span> | Industry: {{ company.industry }}
+            </p>
+        </div>
+        <div class="company-links">
+            {% if company.website %}
+            <a href="{{ company.website }}" target="_blank">
+                <button class="company-website">Website</button>
+            </a>
+            {% else %}
+            <button class="company-website disabled">Website</button>
+            {% endif %}
+
+            {% if company.linkedin %}
+            <a href="{{ company.linkedin }}" target="_blank">
+                <button class="company-linkedin">LinkedIn</button>
+            </a>
+            {% else %}
+            <button class="company-linkedin disabled">LinkedIn</button>
+            {% endif %}
+
+            {% if company.careers_page %}
+            <a href="{{ company.careers_page }}" target="_blank">
+                <button class="company-careers">Careers</button>
+            </a>
+            {% else %}
+            <button class="company-careers disabled">Careers</button>
+            {% endif %}
+
+            <div class="company-edit-delete">
+                <a href="{{ url_for('my_companies.edit_company', id=company.id) }}" class="company-edit btn-primary">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+                <a href="{{ url_for('my_companies.delete_company', id=company.id) }}" class="company-delete btn-danger">
+                    <i class="bi bi-trash"></i>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="company-description">
+            <p>{{ company.about }}</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Jobs Applied</h3>
+            <div class="list-group" id="jobs-list">
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h3>Job Details</h3>
+            <div class="job-details" id="job-details">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.dropdown-toggle').click(function () {
+            $(this).next('.dropdown-menu').slideToggle();
+        });
+    });
+
+    // Sample data for jobs (you can replace it with your data)
+    const jobs = [];
+
+    '{% for application in applications %}'
+    jobs.push(
+        {
+            id: '{{ application.id }}',
+            position: '{{ application.position }}',
+            date_added: '{{ application.date_added }}',
+            description: '{{ application.description }}',
+            salary_range: '{{ application.salary_low }} - {{ application.salary_high }}',
+            status: '{{ application.status }}',
+            keywords: '{% for keyword in application.keywords %}{{ keyword.keyword }}, {% endfor %}',
+        }
+    );
+    '{% endfor %}'
+
+    // Function to display job details when clicked
+    function displayJobDetails(id) {
+        const job = jobs.find(job => job.id === id);
+        if (job) {
+            const detailsHTML = `
+                <div class="job-detail">
+                    <h4 class="position"></h4>
+                    <div class="details-row">
+                        <div class="detail">
+                            <p><strong>Date Applied:</strong> <span class="date">
+                                ` + job.date_added + `
+                            </span></p>
+                        </div>
+                        <div class="detail">
+                            <p><strong>Status:</strong> <span class="status">
+                                ` + job.status + `
+                            </span></p>
+                        </div>
+                        <div class="detail">
+                            <p><strong>Salary Range:</strong> <span class="salary">
+                                ` + job.salary_range + `
+                            </span></p>
+                        </div>
+                    </div>
+                    <div class="details-row">
+                        <p><strong>Keywords:</strong> <span class="keywords">
+                            ` + job.keywords + `
+                        </span></p>
+                    </div>
+                    <div class="details-row">
+                        <p><strong>Description:</strong> <span class="description">
+                            ` + job.description + `
+                        </span></p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('job-details').innerHTML = detailsHTML;
+        }
+    }
+
+    // by default select 1st job
+    displayJobDetails(jobs[0].id);
+
+    // Function to generate job list
+    function generateJobsList(jobs) {
+        const jobsList = document.getElementById('jobs-list');
+        jobsList.innerHTML = '';
+
+        for (const job of jobs) {
+            // Create a list item element
+            const listItem = document.createElement('a');
+            listItem.href = '#';
+            listItem.classList.add('list-group-item', 'list-group-item-action');
+
+            // Add job title
+            listItem.innerHTML = `${job['position']}`;
+            
+            // Add date applied
+            const dateApplied = job.date_added ? job.date_added : 'N/A';
+            if (dateApplied) {
+                listItem.innerHTML += `<span id="date-applied-list">
+                    ${dateApplied}
+                </span>
+                <br>`;
+            }
+
+            // Add click event listener
+            listItem.addEventListener('click', () => displayJobDetails(job['id']));
+
+            jobsList.appendChild(listItem);
+        }
+    }
+
+
+    // Call the function to generate job list on page load
+    window.onload = generateJobsList(jobs);
+</script>
+{% endblock %}

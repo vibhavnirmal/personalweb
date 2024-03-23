@@ -5,4 +5,7 @@ class Weights(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     weight = db.Column(db.Integer)
-    date_added = db.Column(db.DateTime, default=db.func.now())
+    date_added = db.Column(db.Date, default=db.func.now())
+
+    def __repr__(self):
+        return '<Weights %r>' % self.weight

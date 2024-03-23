@@ -76,7 +76,11 @@
                 {% for file in files %}
                 {% if file.deleted == false %}
                 <tr>
-                    <td>{{ file.company.company_name }}</td>
+                    <td>
+                        <a href="{{ url_for('my_companies.view_company', company_name=file.company.company_name) }}">
+                            {{ file.company.company_name }}
+                        </a>
+                    </td>
                     <td id="date">{{ file.date_added }}</td>
 
                     <td>
@@ -130,6 +134,9 @@
 <script>
     $(document).ready(function () {
         var table = $('#example').DataTable();
+
+        // sort by date_added
+        table.order([1, 'desc']).draw();
         
         '{% if company_name %}'
         table.search("{{ company_name }}").draw();

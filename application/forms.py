@@ -10,7 +10,9 @@ class CompanyForm(FlaskForm):
     career_page_url = StringField("Career Page URL", render_kw={"placeholder": "Career Page URL"})
     description = TextAreaField("Description", render_kw={"placeholder": "Description"})
     types = StringField("Types",  render_kw={"placeholder": "Types"})
-    
+    industry = StringField("Industry", render_kw={"placeholder": "Industry"})
+    linkedin = StringField("LinkedIn", render_kw={"placeholder": "LinkedIn"})
+    logo = StringField("Logo", render_kw={"placeholder": "Logo name in the static/images/logos folder"})
     country = StringField("Country", render_kw={"placeholder": "Country"})
     state = StringField("State",  render_kw={"placeholder": "State"})
     city = StringField("City",  render_kw={"placeholder": "City"})

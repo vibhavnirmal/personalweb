@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_migrate import Migrate
 
 from .extensions import db
 
@@ -14,6 +15,8 @@ def create_app(config_file='config.py'):
     app.config.from_pyfile(config_file)
 
     db.init_app(app)
+
+    migrate = Migrate(app, db, directory='application/migrations')
 
     app.register_blueprint(my_applications)
     app.register_blueprint(my_companies)

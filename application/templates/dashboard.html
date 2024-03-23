@@ -30,19 +30,13 @@
     <h4>Top 10 Keywords</h4>
     <div class="row">
         <div class="col-md-9">
+        
         {% if img is not none %}
-            <!-- bytesIO -->
-            <img src="data:image/png;base64,{{ img }}" class="img-fluid" alt="Insights Chart">
+            <img src="{{ imgPath }}" alt="keyword frequency" class="img-fluid">
         {% endif %}
         </div>
         <div class="col-md-3">
-            <!-- show keyword and count side by side in a capsule -->
             <div class="hashtag">
-                <!-- <div class="kw">
-                    <span class="keyword">#bootstrap</span>
-                    <span class="divider">|</span>
-                    <span class="count">12</span> 
-                </div> -->
             </div>
         </div>
 

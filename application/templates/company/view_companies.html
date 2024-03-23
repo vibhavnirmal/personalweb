@@ -24,6 +24,7 @@
             <thead>
                 <tr>
                     <th>Company name</th>
+                    <th>Website</th>
                     <th>Career Link</th>
                     <th>Applications</th>
                     <th>City</th>
@@ -37,10 +38,17 @@
                 {% if file.deleted == false %}
                 <tr>
                     <td>
-                        {% if file.website %}
-                            <a href="{{ file.website | default('#', true) }}" target="_blank">{{ file.company_name }}</a>
-                        {% else %}
+                        <a href="{{ url_for('my_companies.view_company', company_name = file.company_name) }}">
                             {{ file.company_name }}
+                        </a>
+                    </td>
+                    <td>
+                        {% if file.website %}
+                            <a href="{{ file.website | default('#', true) }}" target="_blank">
+                                {{ '<i class="bi-box-arrow-up-right"></i>'|safe }}
+                            </a>
+                        {% else %}
+                            {{ '<i class="bi-box-arrow-up-right"></i>'|safe }}
                         {% endif %}
                     </td>
                         

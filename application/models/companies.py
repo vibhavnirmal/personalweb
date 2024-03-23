@@ -4,18 +4,27 @@ class Company(db.Model):
     __tablename__ = "companies"
 
     id = db.Column(db.Integer, primary_key=True)
+
     company_name = db.Column(db.String, nullable=False)
-    website = db.Column(db.String, nullable=False)
-    careers_page = db.Column(db.String)
 
-    # location_id = db.Column(db.Integer, db.ForeignKey('locations.id'), nullable=False)
-    # location = db.relationship('Location', backref='companies')
+    logo = db.Column(db.String)
 
-    location = db.Column(db.Text, nullable=False)
+    linkedin = db.Column(db.Text)
+    website = db.Column(db.Text)
+    careers_page = db.Column(db.Text)
+
+    location = db.Column(db.Text)
     
-    about = db.Column(db.Text, nullable=False)
-    types = db.Column(db.String, nullable=False)
-    industry = db.Column(db.String, nullable=False)
-    date_added = db.Column(db.DateTime, default=db.func.now())
-    date_updated = db.Column(db.DateTime, default=db.func.now())
-    deleted = db.Column(db.Boolean, default=False)
+    about = db.Column(db.Text)
+
+    types = db.Column(db.Text)
+    industry = db.Column(db.String)
+
+    date_added = db.Column(db.Date, default=db.func.now())
+    date_updated = db.Column(db.Date, default=db.func.now())
+    
+    deleted = db.Column(db.Boolean)
+
+    def __repr__(self):
+        return '<Company %r>' % self.company_name
+    
