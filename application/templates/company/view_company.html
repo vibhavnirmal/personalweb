@@ -120,7 +120,18 @@
                                 ` + job.salary_range + `
                             </span></p>
                         </div>
+                        <div class="detail">
+                            <a href="{{ url_for('my_applications.edit_application', id=id) }}" class="btn btn-primary">
+                                <i class="bi bi-pencil-square"></i>
+                                Edit
+                            </a>
+                            <a href="{{ url_for('my_applications.delete_application', id=id) }}" class="btn btn-danger">
+                                <i class="bi bi-trash"></i>
+                                Delete
+                            </a>
+                        </div>
                     </div>
+                            
                     <div class="details-row">
                         <p><strong>Keywords:</strong> <span class="keywords">
                             ` + job.keywords + `
@@ -156,6 +167,7 @@
             
             // Add date applied
             const dateApplied = job.date_added ? job.date_added : 'N/A';
+
             if (dateApplied) {
                 listItem.innerHTML += `<span id="date-applied-list">
                     ${dateApplied}
