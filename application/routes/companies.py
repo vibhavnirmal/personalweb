@@ -1,4 +1,4 @@
-from re import A
+from collections import defaultdict
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
 import json
 
@@ -10,7 +10,7 @@ from ..models.keywords import Keyword, KeywordAssociation
 
 from ..forms import CompanyForm
 from sqlalchemy.orm import joinedload
-from sqlalchemy import desc, or_
+from sqlalchemy import or_
 
 from datetime import datetime
 
@@ -147,10 +147,8 @@ def delete_company():
     company_id = request.args.get('id')
 
     company = Company.query.filter_by(id=company_id).first()
-
     company.deleted = True
     company.date_updated = datetime.now().date()
-
     db.session.commit()
 
     return redirect(url_for('my_companies.view_companies'))
@@ -170,16 +168,24 @@ def preprocessDescription(description):
     return description
 
 def get_keywords(application_ids):
-    keywords = KeywordAssociation.query.filter(KeywordAssociation.application_id.in_(application_ids)).all()
-    keywords = [keyword.keyword for keyword in keywords]
+    keywords = defaultdict(list)
+
+    associations = KeywordAssociation.query.join(Keyword, KeywordAssociation.keyword_id == Keyword.id).filter(KeywordAssociation.application_id.in_(application_ids)).all()
+
+    keyword_ids = set(association.keyword_id for association in associations)
+    all_keywords = {keyword.id: keyword.keyword for keyword in Keyword.query.filter(Keyword.id.in_(keyword_ids)).all()}
+
+    for association in associations:
+        keyword_name = all_keywords.get(association.keyword_id)
+        if keyword_name:
+            keywords[association.application_id].append(keyword_name)
+
     return keywords
 
 @my_companies.route('/<company_name>')
 def view_company(company_name):
-    # Fetch the company by its name
     company = Company.query.filter_by(company_name=company_name).first_or_404()
 
-    # Parse location JSON
     if company.location is not None:
         location_data = json.loads(company.location)
         city = location_data.get('city')
@@ -189,16 +195,12 @@ def view_company(company_name):
     else:
         location = "Not Available"
     
-    # Fetch all applications associated with the company
     applications = Application.query.filter_by(company_id=company.id).all()
     application_ids = [app.id for app in applications]
 
-    # Preprocess descriptions
     for application in applications:
         application.description = preprocessDescription(application.description)
         
-    # Fetch keywords for all applications
     kws = get_keywords(application_ids)
 
-    # Pass the company and its applications to the template
     return render_template('company/view_company.html', company=company, applications=applications, loc=location, kws=kws)

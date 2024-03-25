@@ -95,7 +95,12 @@
                         {% endif %}
                     </td>
 
-                    <td>{{ file.position }}</td>
+                    <td>
+                        <a href="{{ url_for('my_companies.view_company', company_name=file.company.company_name) }}" style="text-decoration: none; color: rgb(31, 31, 31)">
+                            {{ file.position }}
+                        </a>
+                    </td>
+                    
                     <td>{{ file.from_portal }}</td>
                     <td>{{ file.status }}</td>
 
