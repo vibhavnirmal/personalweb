@@ -38,8 +38,8 @@ class FoodForm(FlaskForm):
 
 
 class ApplicationForm(FlaskForm):
-    company = StringField('Company Name', validators=[DataRequired()], render_kw={"placeholder": "Company Name"})
     position = StringField('Position / Title', render_kw={"placeholder": "Position / Title"})
+    company = StringField('Company Name', validators=[DataRequired()], render_kw={"placeholder": "Company Name"})
     date = DateField('Date', render_kw={"placeholder": "Date"})
     link = URLField('Link to Job Posting', render_kw={"placeholder": "Link to Job Posting"})
     email_given = SelectField('Email Given', choices=[('Outlook', 'Outlook'), ('Gmail', 'Gmail'), ('Proton', 'Proton'), ('Other', 'Other')])
@@ -62,3 +62,7 @@ class WeightTrackerForm(FlaskForm):
     weight = FloatField("Weight", validators=[DataRequired()], render_kw={"placeholder": "Weight"})
     date_added = DateField("Date", render_kw={"placeholder": "Date"})
     submit = SubmitField("Submit")
+
+class SearchMoshanForm(FlaskForm):
+    search_term = StringField("Search Term", validators=[DataRequired()], render_kw={"placeholder": "Search Movie/Show/Anime"})
+    submit = SubmitField("Search")

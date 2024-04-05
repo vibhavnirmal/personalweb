@@ -100,6 +100,7 @@ def edit_company():
             company.careers_page = form.career_page_url.data
             company.about = form.description.data
             company.types = form.types.data
+            company.industry = form.industry.data
 
             company.logo = form.logo.data
             company.linkedin = form.linkedin.data
@@ -128,6 +129,7 @@ def edit_company():
         form.career_page_url.data = company.careers_page
         form.description.data = company.about
         form.types.data = company.types
+        form.industry.data = company.industry
 
         form.logo.data = company.logo
         form.linkedin.data = company.linkedin

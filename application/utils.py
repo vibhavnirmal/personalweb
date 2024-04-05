@@ -1,3 +1,4 @@
+from hmac import new
 from .extensions import db
 from .models.companies import Company
 from .models.keywords import Keyword, KeywordAssociation
@@ -65,6 +66,7 @@ def insert_keywords(application_id, desc):
                     db.session.add(new_keyword)
                     db.session.flush()
 
+                if not keyword_exists:
                     new_keyword_association = KeywordAssociation(keyword_id=new_keyword.id, application_id=application_id)
                     db.session.add(new_keyword_association)
 

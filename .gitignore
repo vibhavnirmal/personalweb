@@ -13,3 +13,6 @@ migrations/
 product*
 application/static/plots/*
 application/static/images/logos/*
+
+track.py
+watchmoshan/

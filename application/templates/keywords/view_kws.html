@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+    <h4 class="text-center">Keywords available</h4>
+    <div class="table-responsive">
+        <table id="example" class="table table-striped align-middle" style="width:100%">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Keyword</th>
+                    <th>frequency</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for file in files %}
+                    <tr>
+                        <td>{{ file.id }}</td>
+                        <td>{{ file.keyword }}</td>
+                        <td>{{ file.frequency }}</td>
+                        <td>
+                            <a href="/edit_kw/{{ file.id }}">
+                                <button class="btn btn-primary btn-sm" type="button">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </a>
+                        </td>
+
+                        <td>
+                            <a href="/delete_kw/{{ file.id }}">
+                                <button class="btn btn-danger btn-sm" type="button">
+                                    <i class="bi bi-trash"></i>
+                                </button>   
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock %}
