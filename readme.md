@@ -11,3 +11,13 @@
 
 `flask --app application db upgrade`
 
+### Key Technologies used:
+
+- Flask
+- TMDB API
+- Ollama
+- Bootstrap
+
+---
+
+rename `dotenv.txt` to `.env` and update your corresponding credentials

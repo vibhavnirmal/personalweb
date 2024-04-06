@@ -296,3 +296,9 @@
     float: right;
     color: #6c757d;
 }
+
+
+.space-between-items{
+    display: flex;
+    justify-content: space-between;
+}

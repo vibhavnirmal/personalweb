@@ -8,11 +8,15 @@
 <div class="container-fluid mt-4">
 
     <div class="container">
-        <div class="row justify-content-between mb-4">
-            <div>
+        <div class="mb-4">
+            <div class="space-between-items">
                 <a href="{{ url_for('my_applications.add_application') }}" class="btn btn-success float-left">
                     <i class="bi bi-plus-circle"></i>
                     &nbsp;Add Application
+                </a>
+                <a href="{{ url_for('my_keywords.view_keywords') }}" class="btn btn-success float-right">
+                    <i class="bi bi-eye-fill"></i>
+                    &nbsp;View Keywords
                 </a>
             </div>
             <div class="text-center">

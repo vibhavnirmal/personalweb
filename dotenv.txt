@@ -1,0 +1,10 @@
+SECRET_KEY = 'secret key'
+
+HOST = "localhost"
+DATABASE = "database name"
+USER = "username"
+PASSWORD = "postgres password"
+PORT = "5432"
+
+TMDB_API_KEY = "Api Key Goes here"
+TMDB_API_RAT = "Read access token goes here"
