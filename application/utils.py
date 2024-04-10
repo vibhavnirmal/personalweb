@@ -21,7 +21,7 @@ def get_company_id(name):
     if company:
         return company.id
     else:
-        company = Company(company_name=name)
+        company = Company(company_name=name, deleted=False)
         db.session.add(company)
         db.session.commit()
         return company.id
@@ -58,6 +58,9 @@ def insert_keywords(application_id, desc):
 
         if keywords_from_notes:
             for keyword in keywords_from_notes:
+                if len(keyword) > 254:
+                    break
+                
                 keyword_exists = Keyword.query.filter_by(keyword=keyword).first()
                 if keyword_exists:
                     keyword_exists.frequency += 1

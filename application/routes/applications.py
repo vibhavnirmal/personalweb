@@ -37,6 +37,8 @@ def add_application():
             email_used=form.email_given.data,
             status=form.status.data,
             from_portal=form.portal.data,
+            salary_low= form.salary_low.data,
+            salary_high=form.salary_high.data,
             description=form.notes.data,
             deleted=False,
             company_id=get_company_id(form.company.data)

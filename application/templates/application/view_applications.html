@@ -65,9 +65,9 @@
         <table id="example" class="table table-striped align-middle" style="width:100%">
             <thead>
                 <tr>
-                    <th>Company name</th>
-                    <th>Applied on</th>
                     <th>Job Link</th>
+                    <th>Applied on</th>
+                    <th>Company name</th>
                     <th>Position</th>
                     <th>Found at</th>
                     <th>Current Status</th>
@@ -81,13 +81,6 @@
                 {% if file.deleted == false %}
                 <tr>
                     <td>
-                        <a href="{{ url_for('my_companies.view_company', company_name=file.company.company_name) }}">
-                            {{ file.company.company_name }}
-                        </a>
-                    </td>
-                    <td id="date">{{ file.date_added }}</td>
-
-                    <td>
                         {% if file.link %}
                             <a href="{{ file.link }}" target="_blank">
                                 <button class="brn btn-primary btn-sm" type="button" id="jobLink">
@@ -98,7 +91,12 @@
                             <span>NA</span>
                         {% endif %}
                     </td>
-
+                    <td id="date">{{ file.date_added }}</td>
+                    <td>
+                        <a href="{{ url_for('my_companies.view_company', company_name=file.company.company_name) }}">
+                            {{ file.company.company_name }}
+                        </a>
+                    </td>
                     <td>
                         <a href="{{ url_for('my_companies.view_company', company_name=file.company.company_name) }}" style="text-decoration: none; color: rgb(31, 31, 31)">
                             {{ file.position }}

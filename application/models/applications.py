@@ -20,8 +20,8 @@ class Application(db.Model):
 
     from_portal = db.Column(db.String)
 
-    salary_low = db.Column(db.Integer)
-    salary_high = db.Column(db.Integer)
+    salary_low = db.Column(db.String)
+    salary_high = db.Column(db.String)
     
     description = db.Column(db.Text)
     personal_notes = db.Column(db.Text)
