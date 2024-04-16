@@ -1,7 +1,7 @@
-from hmac import new
 from .extensions import db
 from .models.companies import Company
 from .models.keywords import Keyword, KeywordAssociation
+from sqlalchemy import func
 
 try:
     from ollama import generate
@@ -17,7 +17,8 @@ def get_all_company_names():
     return names
 
 def get_company_id(name):
-    company = Company.query.filter_by(company_name=name).first()
+    name_lower = name.lower()
+    company = Company.query.filter(func.lower(Company.company_name) == name_lower).first()
     if company:
         return company.id
     else:

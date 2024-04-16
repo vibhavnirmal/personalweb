@@ -28,3 +28,5 @@ class Company(db.Model):
     def __repr__(self):
         return '<Company %r>' % self.company_name
     
+    def as_dict(self):
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}

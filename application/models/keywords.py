@@ -11,6 +11,10 @@ class Keyword(db.Model):
 
     def __repr__(self):
         return '<Keyword %r>' % self.keyword
+    
+    def as_dict(self):
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+
 
 class KeywordAssociation(db.Model):
     __tablename__ = "keyword_association"
@@ -24,3 +28,6 @@ class KeywordAssociation(db.Model):
 
     def __repr__(self):
         return '<KeywordAssociation %r>' % self.id
+    
+    def as_dict(self):
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}

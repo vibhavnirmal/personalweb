@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, abort
+from flask import Blueprint, jsonify, render_template, request, redirect, url_for, flash, abort
 
 from ..utils import insert_keywords, get_all_company_names, get_company_id
 from ..extensions import db
@@ -12,6 +12,38 @@ import json
 from datetime import datetime
 
 my_applications = Blueprint('my_applications', __name__, url_prefix='/applications')
+
+
+@my_applications.route('/read_applications', methods=['POST', 'GET'])
+def read_applications():
+    company_name = request.args.get('company_name')
+
+    if company_name:
+        companyid = get_company_id(company_name)
+        applications = Application.query.filter_by(company_id=companyid).all()
+        for application in applications:
+            application.date_added = application.date_added.strftime("%Y-%m-%d")
+            application.date_updated = application.date_updated.strftime("%Y-%m-%d")
+
+        formatted_data = [app.as_dict() for app in applications]
+
+        return jsonify({
+            'applications': formatted_data,
+            'company_name': company_name
+        })
+    else:
+        all_data = Application.query.options(joinedload(Application.company)).all()
+
+        for application in all_data:
+            application.date_added = application.date_added.strftime("%Y-%m-%d")
+            application.date_updated = application.date_updated.strftime("%Y-%m-%d")
+
+        formatted_data = [app.as_dict() for app in all_data]
+
+        return jsonify({
+            'applications': formatted_data,
+            'company_name': company_name
+        })
 
 @my_applications.route('/view_applications', methods=['POST', 'GET'])
 def view_applications(company_name=None):
